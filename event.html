@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BiteLabs Faculty & Advisors Badge Maker</title>
+  <title>BiteLabs Summit Badge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -24,6 +24,7 @@
     .page-nav {
       display: flex; gap: 8px;
       margin-bottom: 32px;
+      flex-wrap: wrap; justify-content: center;
     }
     .page-nav a {
       padding: 8px 20px; border-radius: 20px;
@@ -48,32 +49,20 @@
       text-align: center;
       margin-bottom: 44px;
     }
-
     .logo-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      display: flex; align-items: center;
+      justify-content: center; gap: 10px;
       margin-bottom: 10px;
     }
+    .header-logo { height: 36px; width: auto; }
 
-    .header-logo {
-      height: 36px;
-      width: auto;
-    }
-
-    header p {
-      color: rgba(255,255,255,0.45);
-      font-size: 14px;
-    }
+    header p { color: rgba(255,255,255,0.45); font-size: 14px; }
 
     header .page-label {
-      display: inline-block;
-      margin-top: 8px;
+      display: inline-block; margin-top: 8px;
       background: rgba(52,211,153,0.15);
       border: 1px solid rgba(52,211,153,0.35);
-      color: #34d399;
-      font-size: 12px; font-weight: 700;
+      color: #34d399; font-size: 12px; font-weight: 700;
       padding: 4px 14px; border-radius: 20px;
       letter-spacing: .06em; text-transform: uppercase;
     }
@@ -81,109 +70,77 @@
     .green { color: #34d399; }
 
     .container {
-      display: flex;
-      gap: 44px;
-      align-items: flex-start;
-      flex-wrap: wrap;
+      display: flex; gap: 44px;
+      align-items: flex-start; flex-wrap: wrap;
       justify-content: center;
-      max-width: 1140px;
-      width: 100%;
+      max-width: 1140px; width: 100%;
     }
 
     .panel {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 32px;
-      width: 340px;
-      flex-shrink: 0;
+      border-radius: 20px; padding: 32px;
+      width: 340px; flex-shrink: 0;
     }
-
-    .panel h2 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 24px;
-    }
+    .panel h2 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 24px; }
 
     label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 6px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      display: block; font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.4); margin-bottom: 6px;
+      letter-spacing: 0.1em; text-transform: uppercase;
     }
 
-    input[type="text"], select {
-      width: 100%;
-      padding: 11px 14px;
+    select {
+      width: 100%; padding: 11px 14px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      font-size: 14px;
-      font-family: 'Sora', sans-serif;
-      color: #fff;
-      outline: none;
-      transition: border-color .2s;
+      border-radius: 10px; font-size: 14px;
+      font-family: 'Sora', sans-serif; color: #fff;
+      outline: none; transition: border-color .2s;
       margin-bottom: 18px;
     }
-
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.22); }
-    input[type="text"]:focus, select:focus { border-color: #34d399; }
+    select:focus { border-color: #34d399; }
     select option { background: #0c1b33; color: #fff; }
 
-    /* Referral code field */
-    .referral-code-field {
-      width: 100%;
-      padding: 11px 14px;
+    /* Event info card in panel */
+    .event-info-card {
       background: rgba(52,211,153,0.08);
-      border: 1px solid rgba(52,211,153,0.3);
-      border-radius: 10px;
-      font-size: 14px; font-weight: 700;
-      font-family: 'Sora', sans-serif;
-      color: #34d399;
-      margin-bottom: 18px;
-      cursor: default;
-      user-select: all;
-      letter-spacing: 0.04em;
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: 12px; padding: 18px 20px;
+      margin-bottom: 20px;
     }
-    .referral-hint {
-      font-size: 11px;
-      color: rgba(255,255,255,0.3);
-      margin-top: -12px;
-      margin-bottom: 18px;
-      line-height: 1.5;
+    .event-info-card .event-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: #34d399; margin-bottom: 10px;
     }
+    .event-info-card .event-title {
+      font-size: 14px; font-weight: 700; color: #fff;
+      line-height: 1.4; margin-bottom: 8px;
+    }
+    .event-info-card .event-meta {
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .event-info-card .event-meta span { display: flex; align-items: center; gap: 6px; }
 
     .upload-area {
       border: 1.5px dashed rgba(255,255,255,0.18);
-      border-radius: 12px;
-      padding: 26px 16px;
-      text-align: center;
-      cursor: pointer;
+      border-radius: 12px; padding: 26px 16px;
+      text-align: center; cursor: pointer;
       transition: border-color .2s, background .2s;
-      margin-bottom: 18px;
-      position: relative;
+      margin-bottom: 18px; position: relative;
     }
-
     .upload-area:hover { border-color: #34d399; background: rgba(52,211,153,0.05); }
-
     .upload-area input[type="file"] {
-      position: absolute; inset: 0;
-      opacity: 0; cursor: pointer;
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
       width: 100%; height: 100%;
     }
-
     .upload-area .icon { font-size: 26px; margin-bottom: 8px; }
     .upload-area p { font-size: 12px; color: rgba(255,255,255,0.35); }
     .upload-area .filename { font-size: 12px; color: #34d399; margin-top: 4px; font-weight: 600; }
-
     .preview-thumb {
-      width: 68px; height: 68px;
-      border-radius: 50%; object-fit: cover;
-      display: block; margin: 0 auto 8px;
+      width: 68px; height: 68px; border-radius: 50%;
+      object-fit: cover; display: block; margin: 0 auto 8px;
       border: 2px solid #34d399;
     }
 
@@ -230,14 +187,15 @@
 
     /* ── LinkedIn Toast ── */
     #liToast {
-      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+      position: fixed; bottom: 30px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
       background: #0c1b33; color: #fff;
       border: 1px solid rgba(52,211,153,0.4);
       border-radius: 12px; padding: 14px 20px;
       max-width: 340px; width: 90%;
       box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-      font-family: 'Sora', sans-serif; font-size: 13px; line-height: 1.5;
-      opacity: 0; pointer-events: none;
+      font-family: 'Sora', sans-serif; font-size: 13px;
+      line-height: 1.5; opacity: 0; pointer-events: none;
       transition: opacity .3s ease, transform .3s ease;
       z-index: 9999; text-align: center;
     }
@@ -250,7 +208,6 @@
       display: flex; flex-direction: column;
       align-items: center; gap: 20px;
     }
-
     .preview-wrapper h2 {
       font-size: 16px; font-weight: 700;
       color: #fff; align-self: flex-start;
@@ -277,9 +234,7 @@
       height: 1px; background: rgba(255,255,255,0.1);
     }
     .htu-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
     }
     @media(max-width:700px){ .htu-grid { grid-template-columns: 1fr; } }
 
@@ -310,7 +265,6 @@
       margin-top: 1px;
     }
 
-    /* Post template card */
     .post-template-card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.09);
@@ -331,13 +285,12 @@
       font-size: 14px; line-height: 1.75;
       color: rgba(255,255,255,0.88);
       white-space: pre-wrap; font-family: 'Sora', sans-serif;
-      margin-bottom: 14px; min-height: 120px;
+      margin-bottom: 14px; min-height: 100px;
     }
     .post-body .li-tag { color: #34d399; font-weight: 700; }
     .post-body .hashtag { color: #60a5fa; }
     .copy-row {
-      display: flex; align-items: center; gap: 12px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     }
     .btn-copy {
       display: flex; align-items: center; gap: 7px;
@@ -358,10 +311,8 @@
     #copyConfirm.show { opacity: 1; }
 
     #loadingNote {
-      font-size: 12px;
-      color: rgba(255,255,255,0.3);
-      text-align: center;
-      margin-top: 8px;
+      font-size: 12px; color: rgba(255,255,255,0.3);
+      text-align: center; margin-top: 8px;
     }
   </style>
 </head>
@@ -370,8 +321,8 @@
 <!-- Page switcher nav -->
 <nav class="page-nav">
   <a href="index.html">🎓 Fellows</a>
-  <a href="faculty.html" class="active">🏛 Faculty &amp; Advisors</a>
-  <a href="event.html">📍 Summit Attendees</a>
+  <a href="faculty.html">🏛 Faculty &amp; Advisors</a>
+  <a href="event.html" class="active">📍 Summit Attendees</a>
 </nav>
 
 <header>
@@ -383,14 +334,24 @@
       <span style="font-size:24px;font-weight:800;color:#fff;letter-spacing:-0.03em;">bitelabs</span>
     </span>
   </div>
-  <p>Create your <span class="green">official faculty &amp; advisor badge</span> in seconds</p>
-  <span class="page-label">Faculty &amp; Advisors</span>
+  <p>Create your <span class="green">Summit attendee badge</span> in seconds</p>
+  <span class="page-label">📍 Summit 2026</span>
 </header>
 
 <div class="container">
 
   <div class="panel">
     <h2>Your Details</h2>
+
+    <!-- Event info summary -->
+    <div class="event-info-card">
+      <div class="event-label">📅 Event Details</div>
+      <div class="event-title">BiteLabs Digital Health, AI &amp; Innovation Summit</div>
+      <div class="event-meta">
+        <span>📍 Miami, FL</span>
+        <span>🗓 April 17th, 2026</span>
+      </div>
+    </div>
 
     <label>Your Photo</label>
     <div class="upload-area" id="uploadArea">
@@ -402,16 +363,6 @@
       </div>
     </div>
 
-    <label>Your Name</label>
-    <input type="text" id="nameInput" placeholder="Your Name" />
-
-    <label>Your Role</label>
-    <select id="roleSelect">
-      <option value="BiteLabs Faculty">BiteLabs Faculty</option>
-      <option value="BiteLabs Mentor">BiteLabs Mentor</option>
-      <option value="BiteLabs Advisor">BiteLabs Advisor</option>
-    </select>
-
     <label>Badge Theme</label>
     <select id="themeSelect">
       <option value="bitelabs">BiteLabs</option>
@@ -420,10 +371,6 @@
       <option value="usa">USA Flag</option>
       <option value="houston">USA - Houston</option>
     </select>
-
-    <label>Your Referral Code</label>
-    <div class="referral-code-field" id="referralCodeDisplay">BL_</div>
-    <p class="referral-hint">Auto-generated from your name. Share this code with candidates you refer to BiteLabs.</p>
 
     <button class="btn-green" id="generateBtn">Generate Badge</button>
 
@@ -461,30 +408,27 @@
   <h2>How to Use Your Badge</h2>
   <div class="htu-grid">
 
-    <!-- Steps card -->
     <div class="htu-card">
       <h3>📋 Steps to share</h3>
       <ol class="htu-steps">
-        <li><span class="step-num">1</span>Enter your name and select your role on the left.</li>
-        <li><span class="step-num">2</span>Click <strong style="color:#fff">Generate Badge</strong> to create your personalised badge.</li>
-        <li><span class="step-num">3</span>Click <strong style="color:#fff">Download as JPG</strong> to save your badge image.</li>
-        <li><span class="step-num">4</span>Copy the post template below, then head to LinkedIn.</li>
-        <li><span class="step-num">5</span>Start a new post, attach your badge image, paste the text and hit <strong style="color:#fff">Post</strong>!</li>
+        <li><span class="step-num">1</span>Upload your photo on the left.</li>
+        <li><span class="step-num">2</span>Choose a badge theme that suits you.</li>
+        <li><span class="step-num">3</span>Click <strong style="color:#fff">Generate Badge</strong> to preview your badge.</li>
+        <li><span class="step-num">4</span>Click <strong style="color:#fff">Download as JPG</strong> to save it.</li>
+        <li><span class="step-num">5</span>Copy the post template below, head to LinkedIn, attach the badge and post!</li>
       </ol>
     </div>
 
-    <!-- Tips card -->
     <div class="htu-card">
       <h3>💡 Tips for best results</h3>
       <ol class="htu-steps">
         <li><span class="step-num">✓</span>Use a clear, professional headshot for maximum impact.</li>
-        <li><span class="step-num">✓</span>Share your referral code with talented candidates in your network.</li>
-        <li><span class="step-num">✓</span>Tag the fellows you're mentoring to celebrate their journey.</li>
-        <li><span class="step-num">✓</span>Add your own personal touch to the template post — make it yours!</li>
+        <li><span class="step-num">✓</span>Post before the event to generate buzz and connect with fellow attendees.</li>
+        <li><span class="step-num">✓</span>Tag people you're excited to meet at the summit.</li>
+        <li><span class="step-num">✓</span>Add your own personal touch to the template post below!</li>
       </ol>
     </div>
 
-    <!-- Post template -->
     <div class="post-template-card">
       <h3>✍️ Post template — copy &amp; paste</h3>
       <div class="post-body" id="postTemplate">Loading…</div>
@@ -508,6 +452,15 @@ const GREEN = '#34d399';
 const WHITE = '#ffffff';
 const S     = 1080;
 
+// ─── Event constants ───────────────────────────────────────────────────────
+const EVENT = {
+  line1:    'I am attending the',
+  line2a:   'BiteLabs Digital Health,',
+  line2b:   'AI & Innovation Summit',
+  location: '📍  Miami, FL',
+  date:     '🗓  April 17th, 2026',
+};
+
 // ─── Asset manifest ────────────────────────────────────────────────────────
 const ASSET_PATHS = {
   logo:      'assets/logo.png',
@@ -522,7 +475,6 @@ const ASSET_PATHS = {
   }
 };
 
-// ─── Image loader ──────────────────────────────────────────────────────────
 const assets = {};
 
 function loadImage(name, src) {
@@ -547,15 +499,6 @@ async function loadAllAssets() {
   document.getElementById('loadingNote').style.display = 'none';
 }
 
-// ─── Referral code generator ───────────────────────────────────────────────
-function generateReferralCode(name) {
-  if (!name || !name.trim()) return 'BL_';
-  const clean = name.trim().replace(/[^a-zA-Z\s]/g, '');
-  const parts = clean.split(/\s+/).filter(Boolean);
-  const formatted = parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
-  return 'BL_' + formatted;
-}
-
 // ─── Photo upload ──────────────────────────────────────────────────────────
 let userPhoto = null;
 
@@ -577,34 +520,20 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
   reader.readAsDataURL(file);
 });
 
-// Update referral code live as name is typed
-document.getElementById('nameInput').addEventListener('input', function() {
-  const code = generateReferralCode(this.value);
-  document.getElementById('referralCodeDisplay').textContent = code;
-  renderBadge();
-  renderPostTemplate();
-});
-
-['roleSelect', 'themeSelect'].forEach(id =>
-  document.getElementById(id).addEventListener('input', renderBadge));
-
-document.getElementById('roleSelect').addEventListener('change', renderPostTemplate);
+document.getElementById('themeSelect').addEventListener('input', renderBadge);
 document.getElementById('generateBtn').addEventListener('click', renderBadge);
 
 // ─── Main render ───────────────────────────────────────────────────────────
 function renderBadge() {
   const canvas = document.getElementById('badgeCanvas');
   const ctx    = canvas.getContext('2d');
-  const name   = document.getElementById('nameInput').value.trim() || 'Your Name';
-  const role   = document.getElementById('roleSelect').value;
   const theme  = document.getElementById('themeSelect').value;
-  const code   = generateReferralCode(document.getElementById('nameInput').value.trim());
 
   ctx.clearRect(0, 0, S, S);
   drawBackground(ctx, theme);
   drawLogo(ctx);
   drawPhoto(ctx, userPhoto);
-  drawNameRole(ctx, name, role, code);
+  drawEventText(ctx);
   drawSponsors(ctx);
   drawFooter(ctx);
   enableButtons();
@@ -634,12 +563,10 @@ function drawBackground(ctx, theme) {
   const br = ctx.createRadialGradient(S*.85, S*.85, 0, S*.85, S*.85, S*.55);
   br.addColorStop(0, 'rgba(52,211,153,0.10)');
   br.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = br;
-  ctx.fillRect(0, 0, S, S);
+  ctx.fillStyle = br; ctx.fillRect(0, 0, S, S);
 
   ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 1;
   for (let x = 0; x <= S; x += 90) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,S); ctx.stroke(); }
   for (let y = 0; y <= S; y += 90) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(S,y); ctx.stroke(); }
   ctx.restore();
@@ -648,10 +575,8 @@ function drawBackground(ctx, theme) {
   bdr.addColorStop(0,   'rgba(52,211,153,0.45)');
   bdr.addColorStop(0.5, 'rgba(52,211,153,0.12)');
   bdr.addColorStop(1,   'rgba(52,211,153,0.35)');
-  ctx.strokeStyle = bdr;
-  ctx.lineWidth   = 3;
-  rrect(ctx, 4, 4, S-8, S-8, 28);
-  ctx.stroke();
+  ctx.strokeStyle = bdr; ctx.lineWidth = 3;
+  rrect(ctx, 4, 4, S-8, S-8, 28); ctx.stroke();
 }
 
 function rrect(ctx, x, y, w, h, r) {
@@ -687,32 +612,23 @@ function drawLogo(ctx) {
 
 function drawLogoFallback(ctx, gy) {
   const gr = 46, gx = S/2 - 158;
-
   const sph = ctx.createRadialGradient(gx-gr*.28, gy-gr*.28, gr*.05, gx, gy, gr);
-  sph.addColorStop(0, '#888aaa'); sph.addColorStop(0.25, '#4a4870');
+  sph.addColorStop(0,'#888aaa'); sph.addColorStop(0.25,'#4a4870');
   sph.addColorStop(0.65,'#2d2748'); sph.addColorStop(1,'#18152e');
   ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2);
   ctx.fillStyle = sph; ctx.fill();
-
-  const spec = ctx.createRadialGradient(gx-gr*.4, gy-gr*.4, 0, gx-gr*.4, gy-gr*.4, gr*.55);
-  spec.addColorStop(0,'rgba(255,255,255,0.18)'); spec.addColorStop(1,'rgba(255,255,255,0)');
-  ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2);
-  ctx.fillStyle = spec; ctx.fill();
 
   ctx.save();
   ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2); ctx.clip();
   ctx.beginPath();
   ctx.moveTo(gx+gr*.18, gy-gr*1.05);
-  ctx.bezierCurveTo(gx-gr*.9, gy-gr*.5, gx+gr*.9, gy+gr*.5, gx-gr*.18, gy+gr*1.05);
-  ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-  ctx.lineWidth   = gr * .58;
-  ctx.lineCap     = 'round';
-  ctx.stroke();
-  ctx.restore();
+  ctx.bezierCurveTo(gx-gr*.9,gy-gr*.5, gx+gr*.9,gy+gr*.5, gx-gr*.18,gy+gr*1.05);
+  ctx.strokeStyle='rgba(255,255,255,0.92)'; ctx.lineWidth=gr*.58; ctx.lineCap='round';
+  ctx.stroke(); ctx.restore();
 
-  ctx.font = `800 74px 'Sora', sans-serif`;
-  ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  ctx.fillText('bitelabs', gx + gr + 18, gy);
+  ctx.font=`800 74px 'Sora', sans-serif`;
+  ctx.fillStyle=WHITE; ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillText('bitelabs', gx+gr+18, gy);
 }
 
 // ─── Photo ─────────────────────────────────────────────────────────────────
@@ -722,7 +638,7 @@ function drawPhoto(ctx, photo) {
   const glow = ctx.createRadialGradient(cx, cy, r, cx, cy, r+30);
   glow.addColorStop(0,'rgba(52,211,153,0.45)'); glow.addColorStop(1,'rgba(52,211,153,0)');
   ctx.beginPath(); ctx.arc(cx, cy, r+30, 0, Math.PI*2);
-  ctx.fillStyle = glow; ctx.fill();
+  ctx.fillStyle=glow; ctx.fill();
 
   ctx.save();
   ctx.beginPath(); ctx.arc(cx, cy, r+10, 0, Math.PI*2);
@@ -755,79 +671,50 @@ function coverFit(iw, ih, bw, bh) {
   return { sx:(iw-bw/sc)/2, sy:(ih-bh/sc)/2, sw:bw/sc, sh:bh/sc };
 }
 
-// ─── Name + Role + Referral Code ───────────────────────────────────────────
-function drawNameRole(ctx, name, role, referralCode) {
-  const lx = 566, nameY = 400;
+// ─── Event Text (replaces name/cohort block) ───────────────────────────────
+function drawEventText(ctx) {
+  const lx   = 566;
+  let   curY = 360;
 
-  // Accent bar
-  const barG = ctx.createLinearGradient(lx, nameY-20, lx, nameY+320);
-  barG.addColorStop(0, GREEN); barG.addColorStop(0.8, GREEN);
-  barG.addColorStop(1,'rgba(52,211,153,0)');
-  ctx.fillStyle = barG; ctx.fillRect(lx, nameY-20, 5, 320);
+  // Accent bar — tall enough to cover all event text
+  const barG = ctx.createLinearGradient(lx, curY-20, lx, curY+390);
+  barG.addColorStop(0, GREEN); barG.addColorStop(0.85, GREEN);
+  barG.addColorStop(1, 'rgba(52,211,153,0)');
+  ctx.fillStyle = barG; ctx.fillRect(lx, curY-20, 5, 390);
 
-  // Name
-  wrapText(ctx, name, lx+30, nameY, S-lx-58, 76, WHITE, `800 64px 'Sora', sans-serif`);
+  const tx = lx + 30;
 
-  // Role (below name)
-  const lines  = countLines(ctx, name, S-lx-58, `800 64px 'Sora', sans-serif`);
-  const roleY  = nameY + lines * 76 + 24;
-  ctx.font=`600 38px 'Sora', sans-serif`; ctx.fillStyle=GREEN;
-  ctx.textAlign='left'; ctx.textBaseline='top';
-  ctx.fillText(role, lx+30, roleY);
+  // "I am attending the"
+  ctx.font         = `400 30px 'Sora', sans-serif`;
+  ctx.fillStyle    = 'rgba(255,255,255,0.65)';
+  ctx.textAlign    = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText(EVENT.line1, tx, curY);
+  curY += 50;
 
-  // Referral code (below role)
-  if (referralCode && referralCode !== 'BL_') {
-    const codeY = roleY + 60;
+  // "BiteLabs Digital Health,"
+  ctx.font      = `800 52px 'Sora', sans-serif`;
+  ctx.fillStyle = WHITE;
+  ctx.fillText(EVENT.line2a, tx, curY);
+  curY += 68;
 
-    // Pill background
-    ctx.save();
-    ctx.font = `700 22px 'Sora', sans-serif`;
-    const codeText = `Referral: ${referralCode}`;
-    const tw = ctx.measureText(codeText).width;
-    const pH = 36, pPad = 18, pR = 10;
-    const px = lx + 26, py = codeY;
+  // "AI & Innovation Summit"
+  ctx.fillText(EVENT.line2b, tx, curY);
+  curY += 82;
 
-    ctx.fillStyle = 'rgba(52,211,153,0.15)';
-    ctx.strokeStyle = 'rgba(52,211,153,0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(px+pR, py);
-    ctx.lineTo(px+tw+pPad*2-pR, py); ctx.quadraticCurveTo(px+tw+pPad*2, py, px+tw+pPad*2, py+pR);
-    ctx.lineTo(px+tw+pPad*2, py+pH-pR); ctx.quadraticCurveTo(px+tw+pPad*2, py+pH, px+tw+pPad*2-pR, py+pH);
-    ctx.lineTo(px+pR, py+pH); ctx.quadraticCurveTo(px, py+pH, px, py+pH-pR);
-    ctx.lineTo(px, py+pR); ctx.quadraticCurveTo(px, py, px+pR, py);
-    ctx.closePath();
-    ctx.fill(); ctx.stroke();
+  // Divider line
+  ctx.strokeStyle = 'rgba(52,211,153,0.3)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(tx, curY); ctx.lineTo(S - 58, curY); ctx.stroke();
+  curY += 32;
 
-    ctx.fillStyle = 'rgba(255,255,255,0.55)';
-    ctx.fillText('Referral: ', px+pPad, py+pH/2);
-    const labelW = ctx.measureText('Referral: ').width;
-    ctx.fillStyle = GREEN;
-    ctx.fillText(referralCode, px+pPad+labelW, py+pH/2);
-    ctx.textBaseline = 'top';
-    ctx.restore();
-  }
-}
+  // Location pill
+  ctx.font      = `600 32px 'Sora', sans-serif`;
+  ctx.fillStyle = GREEN;
+  ctx.fillText(EVENT.location, tx, curY);
+  curY += 54;
 
-function countLines(ctx, text, maxW, font) {
-  ctx.font = font;
-  let lines=1, line='';
-  text.split(' ').forEach(w => {
-    const t = line ? line+' '+w : w;
-    if (ctx.measureText(t).width > maxW && line) { lines++; line=w; } else line=t;
-  });
-  return lines;
-}
-
-function wrapText(ctx, text, x, y, maxW, lh, color, font) {
-  ctx.font=font; ctx.fillStyle=color; ctx.textBaseline='top'; ctx.textAlign='left';
-  let line='', cy=y;
-  text.split(' ').forEach(w => {
-    const t = line ? line+' '+w : w;
-    if (ctx.measureText(t).width > maxW && line) { ctx.fillText(line,x,cy); line=w; cy+=lh; }
-    else line=t;
-  });
-  if (line) ctx.fillText(line, x, cy);
+  // Date pill
+  ctx.fillText(EVENT.date, tx, curY);
 }
 
 // ─── Sponsors ──────────────────────────────────────────────────────────────
@@ -842,94 +729,73 @@ function drawSponsors(ctx) {
   ctx.fillText('SUPPORTED BY:', S/2, secY+4);
 
   const stripImg = assets['sponsors'];
-  const sy = secY + 54;
-  const maxH = 48;
-  const padX = 72;
+  const sy = secY + 54, maxH = 48, padX = 72;
 
   if (stripImg) {
     const scale = Math.min(maxH / stripImg.height, (S - padX*2) / stripImg.width);
-    const dw = stripImg.width  * scale;
-    const dh = stripImg.height * scale;
-
+    const dw = stripImg.width * scale, dh = stripImg.height * scale;
     const bgPad = 20;
     ctx.save();
     ctx.fillStyle = 'rgba(255,255,255,0.30)';
     ctx.beginPath();
-    const bx = S/2 - dw/2 - bgPad, by = sy - dh/2 - bgPad/2;
-    const bw = dw + bgPad*2,        bh = dh + bgPad;
-    const br = 16;
-    ctx.moveTo(bx+br, by);
-    ctx.lineTo(bx+bw-br, by); ctx.quadraticCurveTo(bx+bw, by, bx+bw, by+br);
-    ctx.lineTo(bx+bw, by+bh-br); ctx.quadraticCurveTo(bx+bw, by+bh, bx+bw-br, by+bh);
-    ctx.lineTo(bx+br, by+bh); ctx.quadraticCurveTo(bx, by+bh, bx, by+bh-br);
-    ctx.lineTo(bx, by+br); ctx.quadraticCurveTo(bx, by, bx+br, by);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    ctx.drawImage(stripImg, S/2 - dw/2, sy - dh/2, dw, dh);
+    const bx=S/2-dw/2-bgPad, by=sy-dh/2-bgPad/2, bw=dw+bgPad*2, bh=dh+bgPad, br=16;
+    ctx.moveTo(bx+br,by); ctx.lineTo(bx+bw-br,by); ctx.quadraticCurveTo(bx+bw,by,bx+bw,by+br);
+    ctx.lineTo(bx+bw,by+bh-br); ctx.quadraticCurveTo(bx+bw,by+bh,bx+bw-br,by+bh);
+    ctx.lineTo(bx+br,by+bh); ctx.quadraticCurveTo(bx,by+bh,bx,by+bh-br);
+    ctx.lineTo(bx,by+br); ctx.quadraticCurveTo(bx,by,bx+br,by);
+    ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.drawImage(stripImg, S/2-dw/2, sy-dh/2, dw, dh);
   } else {
     const fallbacks = [
-      { text:'RATHBONES',    font:`700 19px 'Sora',serif`,      color:'rgba(255,255,255,0.82)' },
-      { text:'Prova Health', font:`700 19px 'Sora',sans-serif`,  color:'#93c5fd' },
-      { text:'Candesic',     font:`600 19px 'Sora',sans-serif`,  color:GREEN },
-      { text:'Doyle Clayton',font:`700 19px 'Sora',sans-serif`,  color:'rgba(255,255,255,0.82)' },
-      { text:'aws activate', font:`600 18px 'Sora',sans-serif`,  color:'#fbbf24' },
-      { text:'SEEDLEGALS',   font:`600 19px 'Sora',sans-serif`,  color:'#6ee7b7' },
-      { text:'EWOR',         font:`700 19px 'Sora',sans-serif`,  color:'#c4b5fd' },
+      {text:'RATHBONES',color:'rgba(255,255,255,0.82)'},{text:'Prova Health',color:'#93c5fd'},
+      {text:'Candesic',color:GREEN},{text:'Doyle Clayton',color:'rgba(255,255,255,0.82)'},
+      {text:'aws activate',color:'#fbbf24'},{text:'SEEDLEGALS',color:'#6ee7b7'},{text:'EWOR',color:'#c4b5fd'},
     ];
     const gap = (S - 140) / (fallbacks.length - 1);
     fallbacks.forEach((f, i) => {
-      ctx.font=f.font; ctx.fillStyle=f.color;
+      ctx.font=`700 19px 'Sora',sans-serif`; ctx.fillStyle=f.color;
       ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(f.text, 70 + i*gap, sy);
+      ctx.fillText(f.text, 70+i*gap, sy);
     });
   }
 }
 
 // ─── Footer ────────────────────────────────────────────────────────────────
 function drawFooter(ctx) {
-  const stripY = S - 112, stripH = 112;
+  const stripY = S-112, stripH = 112;
 
   ctx.save();
   ctx.beginPath();
-  ctx.moveTo(7, stripY);
-  ctx.lineTo(S-7, stripY);
+  ctx.moveTo(7, stripY); ctx.lineTo(S-7, stripY);
   ctx.lineTo(S-7, S-28); ctx.quadraticCurveTo(S-7,S-7,S-28,S-7);
   ctx.lineTo(28, S-7); ctx.quadraticCurveTo(7,S-7,7,S-28);
   ctx.closePath();
-  ctx.fillStyle = GREEN; ctx.fill();
-  ctx.restore();
+  ctx.fillStyle=GREEN; ctx.fill(); ctx.restore();
 
   ctx.font=`600 20px 'Sora', sans-serif`; ctx.fillStyle='rgba(12,27,51,0.65)';
   ctx.textAlign='left'; ctx.textBaseline='middle';
   ctx.fillText('APPLY NOW AT', 72, stripY+34);
-
   ctx.font=`800 28px 'Sora', sans-serif`; ctx.fillStyle=NAVY;
   ctx.fillText('WWW.BITELABS.IO', 72, stripY+74);
 
   const logoImg = assets['logoWhite'];
-  const lx = S - 72, ly = stripY + stripH/2;
-
+  const lx = S-72, ly = stripY+stripH/2;
   if (logoImg) {
-    const maxH  = 56;
-    const scale = maxH / logoImg.height;
-    const dw    = logoImg.width * scale;
-    const dh    = logoImg.height * scale;
-    ctx.save();
-    ctx.globalAlpha = 0.85;
-    ctx.drawImage(logoImg, lx - dw, ly - dh/2, dw, dh);
+    const maxH=56, scale=maxH/logoImg.height;
+    const dw=logoImg.width*scale, dh=logoImg.height*scale;
+    ctx.save(); ctx.globalAlpha=0.85;
+    ctx.drawImage(logoImg, lx-dw, ly-dh/2, dw, dh);
     ctx.restore();
   } else {
-    const er = 28;
-    const sg = ctx.createRadialGradient(lx-er*.3, ly-er*.3, er*.05, lx, ly, er);
+    const er=28;
+    const sg=ctx.createRadialGradient(lx-er*.3,ly-er*.3,er*.05,lx,ly,er);
     sg.addColorStop(0,'rgba(12,27,51,0.35)'); sg.addColorStop(1,'rgba(12,27,51,0.08)');
-    ctx.beginPath(); ctx.arc(lx, ly, er, 0, Math.PI*2);
+    ctx.beginPath(); ctx.arc(lx,ly,er,0,Math.PI*2);
     ctx.fillStyle=sg; ctx.fill();
   }
 }
 
-// ─── Enable buttons ────────────────────────────────────────────────────────
+// ─── Buttons ───────────────────────────────────────────────────────────────
 function enableButtons() {
   document.getElementById('downloadBtn').disabled = false;
   const li = document.getElementById('linkedinBtn');
@@ -938,27 +804,21 @@ function enableButtons() {
 
 document.getElementById('downloadBtn').addEventListener('click', () => {
   const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
   const a = document.createElement('a');
-  a.download = `${name}_bitelabs_faculty_badge.jpg`;
+  a.download = 'bitelabs_summit_badge.jpg';
   a.href = canvas.toDataURL('image/jpeg', 0.95);
   a.click();
 });
 
 document.getElementById('linkedinBtn').addEventListener('click', async function(e) {
   e.preventDefault();
-
   const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
-
   const a = document.createElement('a');
-  a.download = `${name}_bitelabs_faculty_badge.jpg`;
+  a.download = 'bitelabs_summit_badge.jpg';
   a.href = canvas.toDataURL('image/jpeg', 0.95);
   a.click();
 
-  const postText = buildPostText();
-  try { await navigator.clipboard.writeText(postText); } catch(_) {}
-
+  try { await navigator.clipboard.writeText(buildPostText()); } catch(_) {}
   window.open('https://www.linkedin.com/feed/', '_blank');
 
   const toast = document.getElementById('liToast');
@@ -968,42 +828,29 @@ document.getElementById('linkedinBtn').addEventListener('click', async function(
 
 // ─── Post template ─────────────────────────────────────────────────────────
 function buildPostText() {
-  const name = document.getElementById('nameInput').value.trim() || 'Your Name';
-  const role = document.getElementById('roleSelect').value;
-  const code = generateReferralCode(document.getElementById('nameInput').value.trim());
-
-  const roleLabel = role === 'BiteLabs Faculty' ? 'Faculty Member'
-                  : role === 'BiteLabs Mentor'  ? 'Mentor'
-                  : 'Advisor';
-
-  const codeNote = (code && code !== 'BL_')
-    ? `\n\nIf you're interested in applying to the programme, reach out — I'd love to support your journey. 🔑 Use my referral code: ${code}`
-    : '';
-
   return (
-    `🚀 I'm excited to share that I've joined @BiteLabs Digital Health as a ${roleLabel}!\n\n` +
-    `I'll be supporting the next generation of digital health innovators through the BiteLabs Fellowship Programme — helping fellows at the intersection of AI, technology, and healthcare.\n\n` +
-    `If you're passionate about shaping the future of healthcare, this is a fantastic community to be a part of.${codeNote}\n\n` +
-    `#BiteLabs #DigitalHealth #AI #HealthTech #Fellowship #HealthcareInnovation #Mentorship`
+    `🌟 Excited to share that I'll be attending the @BiteLabs Digital Health, AI & Innovation Summit!\n\n` +
+    `📍 Miami, FL  |  🗓 April 17th, 2026\n\n` +
+    `This is set to be an incredible day bringing together the brightest minds at the intersection of healthcare, AI, and technology. If you're attending, let's connect!\n\n` +
+    `#BiteLabs #DigitalHealth #AI #HealthTech #Innovation #HealthcareInnovation #Miami #Summit2026`
   );
 }
 
 function renderPostTemplate() {
-  const raw = buildPostText();
+  const raw  = buildPostText();
   const html = raw
-    .replace(/@BiteLabs Digital Health/g,
-      '<span class="li-tag">@BiteLabs Digital Health</span>')
+    .replace(/@BiteLabs Digital Health, AI & Innovation Summit/g,
+      '<span class="li-tag">@BiteLabs Digital Health, AI & Innovation Summit</span>')
     .replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
   document.getElementById('postTemplate').innerHTML = html;
 }
 
 document.getElementById('copyPostBtn').addEventListener('click', async () => {
-  const text = buildPostText();
   try {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(buildPostText());
   } catch(_) {
     const ta = document.createElement('textarea');
-    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    ta.value = buildPostText(); ta.style.position='fixed'; ta.style.opacity='0';
     document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); document.body.removeChild(ta);
   }
@@ -1014,10 +861,7 @@ document.getElementById('copyPostBtn').addEventListener('click', async () => {
 
 // ─── Boot ──────────────────────────────────────────────────────────────────
 (async () => {
-  await Promise.all([
-    document.fonts.ready,
-    loadAllAssets()
-  ]);
+  await Promise.all([ document.fonts.ready, loadAllAssets() ]);
   renderBadge();
   renderPostTemplate();
 })();
