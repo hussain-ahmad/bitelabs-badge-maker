@@ -363,6 +363,16 @@
       text-align: center;
       margin-top: 8px;
     }
+
+    /* Save reminder */
+    .save-reminder {
+      background: rgba(251,191,36,0.1);
+      border: 1px solid rgba(251,191,36,0.35);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; color: rgba(251,191,36,0.95);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
   </style>
 </head>
 <body>
@@ -478,8 +488,9 @@
     </div>
 
     <!-- Post template -->
-    <div class="post-template-card">
+    <div class="post-template-card" id="postSection">
       <h3>✍️ Post template — copy &amp; paste</h3>
+      <div class="save-reminder">💾 Please make sure you've saved the badge before sharing.</div>
       <div class="post-body" id="postTemplate">Loading…</div>
       <div class="copy-row">
         <button class="btn-copy" id="copyPostBtn">
@@ -938,25 +949,9 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   a.click();
 });
 
-document.getElementById('linkedinBtn').addEventListener('click', async function(e) {
+document.getElementById('linkedinBtn').addEventListener('click', function(e) {
   e.preventDefault();
-
-  const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
-
-  const a = document.createElement('a');
-  a.download = `${name}_bitelabs_faculty_badge.jpg`;
-  a.href = canvas.toDataURL('image/jpeg', 0.95);
-  a.click();
-
-  const postText = buildPostText();
-  try { await navigator.clipboard.writeText(postText); } catch(_) {}
-
-  window.open('https://www.linkedin.com/feed/', '_blank');
-
-  const toast = document.getElementById('liToast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 7000);
+  document.getElementById('postSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 // ─── Post template ─────────────────────────────────────────────────────────

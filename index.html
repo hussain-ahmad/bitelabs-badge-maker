@@ -303,28 +303,14 @@
     }
     #copyConfirm.show { opacity: 1; }
 
-    /* ── Page Nav ── */
-    .page-nav {
-      display: flex; gap: 8px;
-      margin-bottom: 32px;
-    }
-    .page-nav a {
-      padding: 8px 20px; border-radius: 20px;
-      font-size: 13px; font-weight: 700;
-      font-family: 'Sora', sans-serif;
-      text-decoration: none; transition: all .2s;
-    }
-    .page-nav a.active {
-      background: #34d399; color: #0c1b33;
-    }
-    .page-nav a:not(.active) {
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .page-nav a:not(.active):hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+    /* Save reminder */
+    .save-reminder {
+      background: rgba(251,191,36,0.1);
+      border: 1px solid rgba(251,191,36,0.35);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; color: rgba(251,191,36,0.95);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
     }
 
     /* Loading state */
@@ -445,8 +431,9 @@
     </div>
 
     <!-- Post template -->
-    <div class="post-template-card">
+    <div class="post-template-card" id="postSection">
       <h3>✍️ Post template — copy &amp; paste</h3>
+      <div class="save-reminder">💾 Please make sure you've saved the badge before sharing.</div>
       <div class="post-body" id="postTemplate">Loading…</div>
       <div class="copy-row">
         <button class="btn-copy" id="copyPostBtn">
@@ -868,30 +855,9 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   a.click();
 });
 
-document.getElementById('linkedinBtn').addEventListener('click', async function(e) {
+document.getElementById('linkedinBtn').addEventListener('click', function(e) {
   e.preventDefault();
-
-  const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
-  const cohort = document.getElementById('cohortSelect').value;
-
-  // 1 ── Auto-download the badge image
-  const a = document.createElement('a');
-  a.download = `${name}_bitelabs_badge.jpg`;
-  a.href = canvas.toDataURL('image/jpeg', 0.95);
-  a.click();
-
-  // 2 ── Copy post text to clipboard
-  const postText = getPostText();
-  try { await navigator.clipboard.writeText(postText); } catch(_) {}
-
-  // 3 ── Open LinkedIn post composer
-  window.open('https://www.linkedin.com/feed/', '_blank');
-
-  // 4 ── Show toast instructions
-  const toast = document.getElementById('liToast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 7000);
+  document.getElementById('postSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 // ─── Post template ─────────────────────────────────────────────────────────
