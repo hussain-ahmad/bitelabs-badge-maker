@@ -204,6 +204,105 @@
       max-width: 520px; width: 100%; height: auto;
     }
 
+    /* ── How to Use ── */
+    .how-to-use {
+      max-width: 1160px; margin: 48px auto 0;
+      padding: 0 24px 60px;
+    }
+    .how-to-use h2 {
+      font-size: 20px; font-weight: 800;
+      color: #fff; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .how-to-use h2::after {
+      content: ''; flex: 1;
+      height: 1px; background: rgba(255,255,255,0.1);
+    }
+    .htu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media(max-width:700px){ .htu-grid { grid-template-columns: 1fr; } }
+
+    .htu-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 24px;
+    }
+    .htu-card h3 {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: #34d399; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .htu-steps { list-style: none; padding: 0; margin: 0; }
+    .htu-steps li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14px; color: rgba(255,255,255,0.75);
+      line-height: 1.5; padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .htu-steps li:last-child { border-bottom: none; }
+    .htu-steps .step-num {
+      flex-shrink: 0; width: 22px; height: 22px;
+      border-radius: 50%; background: #34d399;
+      color: #0c1b33; font-size: 11px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* Post template card */
+    .post-template-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 24px;
+      grid-column: span 2;
+    }
+    @media(max-width:700px){ .post-template-card { grid-column: span 1; } }
+    .post-template-card h3 {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: #34d399; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .post-body {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 18px 20px;
+      font-size: 14px; line-height: 1.75;
+      color: rgba(255,255,255,0.88);
+      white-space: pre-wrap; font-family: 'Sora', sans-serif;
+      margin-bottom: 14px; min-height: 120px;
+    }
+    .post-body .li-tag {
+      color: #34d399; font-weight: 700;
+    }
+    .post-body .hashtag { color: #60a5fa; }
+    .copy-row {
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-copy {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: 8px;
+      background: rgba(52,211,153,0.15);
+      border: 1px solid rgba(52,211,153,0.4);
+      color: #34d399; font-size: 13px; font-weight: 700;
+      font-family: 'Sora', sans-serif;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-copy:hover { background: rgba(52,211,153,0.28); }
+    .btn-copy svg { width: 14px; height: 14px; fill: #34d399; }
+    .copy-hint {
+      font-size: 12px; color: rgba(255,255,255,0.35);
+    }
+    #copyConfirm {
+      font-size: 12px; color: #34d399; font-weight: 700;
+      opacity: 0; transition: opacity .3s;
+    }
+    #copyConfirm.show { opacity: 1; }
+
     /* Loading state */
     #loadingNote {
       font-size: 12px;
@@ -292,6 +391,51 @@
   </div>
 
 </div>
+
+<!-- ── How to Use ─────────────────────────────────────────── -->
+<section class="how-to-use">
+  <h2>How to Use Your Badge</h2>
+  <div class="htu-grid">
+
+    <!-- Steps card -->
+    <div class="htu-card">
+      <h3>📋 Steps to share</h3>
+      <ol class="htu-steps">
+        <li><span class="step-num">1</span>Fill in your name and select your cohort on the left.</li>
+        <li><span class="step-num">2</span>Click <strong style="color:#fff">Generate Badge</strong> to create your personalised badge.</li>
+        <li><span class="step-num">3</span>Click <strong style="color:#fff">Download as JPG</strong> to save your badge image.</li>
+        <li><span class="step-num">4</span>Copy the post template below, then head to LinkedIn.</li>
+        <li><span class="step-num">5</span>Start a new post, attach your badge image, paste the text and hit <strong style="color:#fff">Post</strong>!</li>
+      </ol>
+    </div>
+
+    <!-- Tips card -->
+    <div class="htu-card">
+      <h3>💡 Tips for best results</h3>
+      <ol class="htu-steps">
+        <li><span class="step-num">✓</span>Use a clear, well-lit headshot for maximum impact.</li>
+        <li><span class="step-num">✓</span>Tag colleagues or mentors in your post to extend your reach.</li>
+        <li><span class="step-num">✓</span>Share within the first week of joining to maximise engagement.</li>
+        <li><span class="step-num">✓</span>Add your own personal touch to the template post below — make it yours!</li>
+      </ol>
+    </div>
+
+    <!-- Post template -->
+    <div class="post-template-card">
+      <h3>✍️ Post template — copy &amp; paste</h3>
+      <div class="post-body" id="postTemplate">Loading…</div>
+      <div class="copy-row">
+        <button class="btn-copy" id="copyPostBtn">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          Copy post text
+        </button>
+        <span id="copyConfirm">✓ Copied to clipboard!</span>
+        <span class="copy-hint">Then paste directly into your LinkedIn post</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <script>
 // ─── Brand tokens ──────────────────────────────────────────────────────────
@@ -714,12 +858,7 @@ document.getElementById('linkedinBtn').addEventListener('click', async function(
   a.click();
 
   // 2 ── Copy post text to clipboard
-  const postText =
-    `🎉 I'm happy to announce I will be joining the BiteLabs Fellowship Programme!\n\n` +
-    `I've been selected as part of the ${cohort} cohort of the BiteLabs Digital Health, AI & Innovation Fellowship Programme.\n\n` +
-    `Really excited for what's ahead! 🚀\n\n` +
-    `#BiteLabs #DigitalHealth #AI #Innovation #HealthTech #Fellowship`;
-
+  const postText = getPostText();
   try { await navigator.clipboard.writeText(postText); } catch(_) {}
 
   // 3 ── Open LinkedIn post composer
@@ -731,6 +870,50 @@ document.getElementById('linkedinBtn').addEventListener('click', async function(
   setTimeout(() => toast.classList.remove('show'), 7000);
 });
 
+// ─── Post template ─────────────────────────────────────────────────────────
+function buildPostText() {
+  const cohort = document.getElementById('cohortSelect').value;
+  return (
+    `🎉 I'm thrilled to announce that I've been selected to join the @BiteLabs Digital Health Fellowship Programme!\n\n` +
+    `I'll be part of the ${cohort} cohort — an incredible group of innovators working at the intersection of digital health, AI, and healthcare innovation.\n\n` +
+    `I can't wait to learn, collaborate, and help shape the future of healthcare alongside the BiteLabs community. 🚀\n\n` +
+    `#BiteLabs #DigitalHealth #AI #HealthTech #Fellowship #Innovation #HealthcareInnovation`
+  );
+}
+
+function renderPostTemplate() {
+  const raw = buildPostText();
+  // Highlight the LinkedIn tag, hashtags for display
+  const html = raw
+    .replace(/@BiteLabs Digital Health Fellowship Programme/g,
+      '<span class="li-tag">@BiteLabs Digital Health Fellowship Programme</span>')
+    .replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
+  document.getElementById('postTemplate').innerHTML = html;
+}
+
+// Update post template whenever cohort changes
+document.getElementById('cohortSelect').addEventListener('change', renderPostTemplate);
+
+// Copy button
+document.getElementById('copyPostBtn').addEventListener('click', async () => {
+  const text = buildPostText();
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch(_) {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  const confirm = document.getElementById('copyConfirm');
+  confirm.classList.add('show');
+  setTimeout(() => confirm.classList.remove('show'), 2500);
+});
+
+// Also update clipboard text used by LinkedIn share button to stay in sync
+function getPostText() { return buildPostText(); }
+
 // ─── Boot ──────────────────────────────────────────────────────────────────
 (async () => {
   await Promise.all([
@@ -738,6 +921,7 @@ document.getElementById('linkedinBtn').addEventListener('click', async function(
     loadAllAssets()
   ]);
   renderBadge();
+  renderPostTemplate();
 })();
 </script>
 </body>
