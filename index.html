@@ -170,6 +170,24 @@
 
     .divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 20px 0; }
 
+    /* ── LinkedIn Toast ── */
+    #liToast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #0c1b33; color: #fff;
+      border: 1px solid rgba(52,211,153,0.4);
+      border-radius: 12px; padding: 14px 20px;
+      max-width: 340px; width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+      font-family: 'Sora', sans-serif; font-size: 13px; line-height: 1.5;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease, transform .3s ease;
+      z-index: 9999; text-align: center;
+    }
+    #liToast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    #liToast strong { color: #34d399; display: block; margin-bottom: 4px; font-size: 14px; }
+    #liToast .steps { text-align: left; margin-top: 8px; padding-left: 16px; }
+    #liToast .steps li { margin-bottom: 4px; }
+
     .preview-wrapper {
       display: flex; flex-direction: column;
       align-items: center; gap: 20px;
@@ -255,6 +273,17 @@
       Share on LinkedIn
     </a>
     <p id="loadingNote">Loading assets…</p>
+  </div>
+
+  <!-- LinkedIn share toast -->
+  <div id="liToast">
+    <strong>🚀 Almost there!</strong>
+    Your badge has been downloaded &amp; post text copied.<br>
+    <ol class="steps">
+      <li>LinkedIn is opening — click <b>Start a post</b></li>
+      <li>Attach the downloaded badge image</li>
+      <li>Paste the copied text &amp; post!</li>
+    </ol>
   </div>
 
   <div class="preview-wrapper">
@@ -671,13 +700,35 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   a.click();
 });
 
-document.getElementById('linkedinBtn').addEventListener('click', function(e) {
+document.getElementById('linkedinBtn').addEventListener('click', async function(e) {
   e.preventDefault();
+
+  const canvas = document.getElementById('badgeCanvas');
+  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
   const cohort = document.getElementById('cohortSelect').value;
-  const msg = encodeURIComponent(
-    `Thrilled to share that I've been selected as a ${cohort} Fellow at the BiteLabs Digital Health Fellowship! 🚀\n\n#BiteLabs #DigitalHealth #Fellowship #HealthTech #Innovation`
-  );
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://www.bitelabs.io')}&summary=${msg}`,'_blank','width=600,height=600');
+
+  // 1 ── Auto-download the badge image
+  const a = document.createElement('a');
+  a.download = `${name}_bitelabs_badge.jpg`;
+  a.href = canvas.toDataURL('image/jpeg', 0.95);
+  a.click();
+
+  // 2 ── Copy post text to clipboard
+  const postText =
+    `🎉 I'm happy to announce I will be joining the BiteLabs Fellowship Programme!\n\n` +
+    `I've been selected as part of the ${cohort} cohort of the BiteLabs Digital Health, AI & Innovation Fellowship Programme.\n\n` +
+    `Really excited for what's ahead! 🚀\n\n` +
+    `#BiteLabs #DigitalHealth #AI #Innovation #HealthTech #Fellowship`;
+
+  try { await navigator.clipboard.writeText(postText); } catch(_) {}
+
+  // 3 ── Open LinkedIn post composer
+  window.open('https://www.linkedin.com/feed/', '_blank');
+
+  // 4 ── Show toast instructions
+  const toast = document.getElementById('liToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 7000);
 });
 
 // ─── Boot ──────────────────────────────────────────────────────────────────
