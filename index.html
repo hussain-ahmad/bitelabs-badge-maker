@@ -874,17 +874,18 @@ document.getElementById('linkedinBtn').addEventListener('click', async function(
 function buildPostText() {
   const cohort = document.getElementById('cohortSelect').value;
   return (
-    `🎉 I'm thrilled to announce that I've been selected to join the BiteLabs Fellowship Programme!\n\n` +
+    `🎉 I'm thrilled to announce that I've been selected to join the @BiteLabs Digital Health Fellowship Programme!\n\n` +
     `I'll be a part of the ${cohort} cohort — an incredible group of innovators working at the intersection of digital health, AI, and healthcare innovation.\n\n` +
-    `I can't wait to learn, collaborate, and help shape the future of healthcare alongside the BiteLabs community. 🚀\n\n` +
     `#BiteLabs #DigitalHealth #AI #HealthTech #Fellowship #Innovation #HealthcareInnovation`
   );
 }
 
 function renderPostTemplate() {
   const raw = buildPostText();
-  // Highlight hashtags for display
+  // Highlight LinkedIn tag and hashtags for display
   const html = raw
+    .replace(/@BiteLabs Digital Health Fellowship Programme/g,
+      '<span class="li-tag">@BiteLabs Digital Health Fellowship Programme</span>')
     .replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
   document.getElementById('postTemplate').innerHTML = html;
 }
