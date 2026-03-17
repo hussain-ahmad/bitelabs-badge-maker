@@ -32,32 +32,21 @@
       font-family: 'Sora', sans-serif;
       text-decoration: none; transition: all .2s;
     }
-    .page-nav a.active {
-      background: #34d399; color: #0c1b33;
-    }
+    .page-nav a.active { background: #34d399; color: #0c1b33; }
     .page-nav a:not(.active) {
       background: rgba(255,255,255,0.06);
       color: rgba(255,255,255,0.6);
       border: 1px solid rgba(255,255,255,0.1);
     }
-    .page-nav a:not(.active):hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
+    .page-nav a:not(.active):hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-    header {
-      text-align: center;
-      margin-bottom: 44px;
-    }
+    header { text-align: center; margin-bottom: 44px; }
     .logo-row {
       display: flex; align-items: center;
-      justify-content: center; gap: 10px;
-      margin-bottom: 10px;
+      justify-content: center; gap: 10px; margin-bottom: 10px;
     }
     .header-logo { height: 36px; width: auto; }
-
     header p { color: rgba(255,255,255,0.45); font-size: 14px; }
-
     header .page-label {
       display: inline-block; margin-top: 8px;
       background: rgba(52,211,153,0.15);
@@ -72,8 +61,7 @@
     .container {
       display: flex; gap: 44px;
       align-items: flex-start; flex-wrap: wrap;
-      justify-content: center;
-      max-width: 1140px; width: 100%;
+      justify-content: center; max-width: 1140px; width: 100%;
     }
 
     .panel {
@@ -90,24 +78,11 @@
       letter-spacing: 0.1em; text-transform: uppercase;
     }
 
-    select {
-      width: 100%; padding: 11px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px; font-size: 14px;
-      font-family: 'Sora', sans-serif; color: #fff;
-      outline: none; transition: border-color .2s;
-      margin-bottom: 18px;
-    }
-    select:focus { border-color: #34d399; }
-    select option { background: #0c1b33; color: #fff; }
-
-    /* Event info card in panel */
+    /* Event info card */
     .event-info-card {
       background: rgba(52,211,153,0.08);
       border: 1px solid rgba(52,211,153,0.25);
-      border-radius: 12px; padding: 18px 20px;
-      margin-bottom: 20px;
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;
     }
     .event-info-card .event-label {
       font-size: 10px; font-weight: 700; letter-spacing: .1em;
@@ -121,7 +96,6 @@
       font-size: 12px; color: rgba(255,255,255,0.5);
       display: flex; flex-direction: column; gap: 3px;
     }
-    .event-info-card .event-meta span { display: flex; align-items: center; gap: 6px; }
 
     .upload-area {
       border: 1.5px dashed rgba(255,255,255,0.18);
@@ -163,8 +137,7 @@
       font-family: 'Sora', sans-serif;
       border: 1.5px solid rgba(52,211,153,0.35);
       border-radius: 10px; cursor: pointer;
-      transition: border-color .2s, background .2s;
-      margin-bottom: 12px;
+      transition: border-color .2s, background .2s; margin-bottom: 12px;
     }
     .btn-outline:hover { border-color: #34d399; background: rgba(52,211,153,0.06); }
     .btn-outline:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -177,8 +150,7 @@
       font-size: 14px; font-weight: 700;
       font-family: 'Sora', sans-serif;
       border: none; border-radius: 10px;
-      cursor: pointer; transition: background .2s;
-      text-decoration: none;
+      cursor: pointer; transition: background .2s; text-decoration: none;
     }
     .btn-linkedin:hover { background: #005f94; }
     .btn-linkedin svg { width: 16px; height: 16px; fill: white; flex-shrink: 0; }
@@ -208,34 +180,24 @@
       display: flex; flex-direction: column;
       align-items: center; gap: 20px;
     }
-    .preview-wrapper h2 {
-      font-size: 16px; font-weight: 700;
-      color: #fff; align-self: flex-start;
-    }
+    .preview-wrapper h2 { font-size: 16px; font-weight: 700; color: #fff; align-self: flex-start; }
 
     canvas {
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
       max-width: 520px; width: 100%; height: auto;
     }
 
     /* ── How to Use ── */
     .how-to-use {
-      max-width: 1160px; margin: 48px auto 0;
-      padding: 0 24px 60px;
+      max-width: 1160px; margin: 48px auto 0; padding: 0 24px 60px;
     }
     .how-to-use h2 {
-      font-size: 20px; font-weight: 800;
-      color: #fff; margin-bottom: 24px;
+      font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 24px;
       display: flex; align-items: center; gap: 10px;
     }
-    .how-to-use h2::after {
-      content: ''; flex: 1;
-      height: 1px; background: rgba(255,255,255,0.1);
-    }
-    .htu-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-    }
+    .how-to-use h2::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+    .htu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media(max-width:700px){ .htu-grid { grid-template-columns: 1fr; } }
 
     .htu-card {
@@ -244,9 +206,8 @@
       border-radius: 16px; padding: 24px;
     }
     .htu-card h3 {
-      font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: #34d399; margin-bottom: 16px;
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: #34d399; margin-bottom: 16px;
       display: flex; align-items: center; gap: 8px;
     }
     .htu-steps { list-style: none; padding: 0; margin: 0; }
@@ -261,64 +222,48 @@
       flex-shrink: 0; width: 22px; height: 22px;
       border-radius: 50%; background: #34d399;
       color: #0c1b33; font-size: 11px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
     }
 
     .post-template-card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 16px; padding: 24px;
-      grid-column: span 2;
+      border-radius: 16px; padding: 24px; grid-column: span 2;
     }
     @media(max-width:700px){ .post-template-card { grid-column: span 1; } }
     .post-template-card h3 {
-      font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: #34d399; margin-bottom: 16px;
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: #34d399; margin-bottom: 16px;
       display: flex; align-items: center; gap: 8px;
     }
     .post-body {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px; padding: 18px 20px;
-      font-size: 14px; line-height: 1.75;
-      color: rgba(255,255,255,0.88);
+      font-size: 14px; line-height: 1.75; color: rgba(255,255,255,0.88);
       white-space: pre-wrap; font-family: 'Sora', sans-serif;
       margin-bottom: 14px; min-height: 100px;
     }
     .post-body .li-tag { color: #34d399; font-weight: 700; }
     .post-body .hashtag { color: #60a5fa; }
-    .copy-row {
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
+    .copy-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .btn-copy {
       display: flex; align-items: center; gap: 7px;
       padding: 9px 18px; border-radius: 8px;
-      background: rgba(52,211,153,0.15);
-      border: 1px solid rgba(52,211,153,0.4);
+      background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.4);
       color: #34d399; font-size: 13px; font-weight: 700;
-      font-family: 'Sora', sans-serif;
-      cursor: pointer; transition: background .2s;
+      font-family: 'Sora', sans-serif; cursor: pointer; transition: background .2s;
     }
     .btn-copy:hover { background: rgba(52,211,153,0.28); }
     .btn-copy svg { width: 14px; height: 14px; fill: #34d399; }
     .copy-hint { font-size: 12px; color: rgba(255,255,255,0.35); }
-    #copyConfirm {
-      font-size: 12px; color: #34d399; font-weight: 700;
-      opacity: 0; transition: opacity .3s;
-    }
+    #copyConfirm { font-size: 12px; color: #34d399; font-weight: 700; opacity: 0; transition: opacity .3s; }
     #copyConfirm.show { opacity: 1; }
 
-    #loadingNote {
-      font-size: 12px; color: rgba(255,255,255,0.3);
-      text-align: center; margin-top: 8px;
-    }
+    #loadingNote { font-size: 12px; color: rgba(255,255,255,0.3); text-align: center; margin-top: 8px; }
   </style>
 </head>
 <body>
 
-<!-- Page switcher nav -->
 <nav class="page-nav">
   <a href="index.html">🎓 Fellows</a>
   <a href="faculty.html">🏛 Faculty &amp; Advisors</a>
@@ -335,7 +280,7 @@
     </span>
   </div>
   <p>Create your <span class="green">Summit attendee badge</span> in seconds</p>
-  <span class="page-label">📍 Summit 2026</span>
+  <span class="page-label">📍 Miami Summit 2026</span>
 </header>
 
 <div class="container">
@@ -343,13 +288,13 @@
   <div class="panel">
     <h2>Your Details</h2>
 
-    <!-- Event info summary -->
     <div class="event-info-card">
       <div class="event-label">📅 Event Details</div>
       <div class="event-title">BiteLabs Digital Health, AI &amp; Innovation Summit</div>
       <div class="event-meta">
-        <span>📍 Miami, FL</span>
-        <span>🗓 April 17th, 2026</span>
+        <span>📍 Jones Day — Miami, FL</span>
+        <span>🗓 Friday, April 17th, 2026</span>
+        <span>🕙 10:00AM – 5:00PM EDT</span>
       </div>
     </div>
 
@@ -362,15 +307,6 @@
         <p style="font-size:11px;margin-top:4px;color:rgba(255,255,255,0.2);">JPG, PNG, WEBP</p>
       </div>
     </div>
-
-    <label>Badge Theme</label>
-    <select id="themeSelect">
-      <option value="bitelabs">BiteLabs</option>
-      <option value="london1">London City</option>
-      <option value="london2">London Big Ben</option>
-      <option value="usa">USA Flag</option>
-      <option value="houston">USA - Houston</option>
-    </select>
 
     <button class="btn-green" id="generateBtn">Generate Badge</button>
 
@@ -385,7 +321,6 @@
     <p id="loadingNote">Loading assets…</p>
   </div>
 
-  <!-- LinkedIn share toast -->
   <div id="liToast">
     <strong>🚀 Almost there!</strong>
     Your badge has been downloaded &amp; post text copied.<br>
@@ -403,7 +338,7 @@
 
 </div>
 
-<!-- ── How to Use ─────────────────────────────────────────── -->
+<!-- ── How to Use ── -->
 <section class="how-to-use">
   <h2>How to Use Your Badge</h2>
   <div class="htu-grid">
@@ -412,10 +347,9 @@
       <h3>📋 Steps to share</h3>
       <ol class="htu-steps">
         <li><span class="step-num">1</span>Upload your photo on the left.</li>
-        <li><span class="step-num">2</span>Choose a badge theme that suits you.</li>
-        <li><span class="step-num">3</span>Click <strong style="color:#fff">Generate Badge</strong> to preview your badge.</li>
-        <li><span class="step-num">4</span>Click <strong style="color:#fff">Download as JPG</strong> to save it.</li>
-        <li><span class="step-num">5</span>Copy the post template below, head to LinkedIn, attach the badge and post!</li>
+        <li><span class="step-num">2</span>Click <strong style="color:#fff">Generate Badge</strong> to preview your badge.</li>
+        <li><span class="step-num">3</span>Click <strong style="color:#fff">Download as JPG</strong> to save it.</li>
+        <li><span class="step-num">4</span>Copy the post template below, head to LinkedIn, attach the badge and post!</li>
       </ol>
     </div>
 
@@ -425,7 +359,7 @@
         <li><span class="step-num">✓</span>Use a clear, professional headshot for maximum impact.</li>
         <li><span class="step-num">✓</span>Post before the event to generate buzz and connect with fellow attendees.</li>
         <li><span class="step-num">✓</span>Tag people you're excited to meet at the summit.</li>
-        <li><span class="step-num">✓</span>Add your own personal touch to the template post below!</li>
+        <li><span class="step-num">✓</span>Add your own personal touch to the template post!</li>
       </ol>
     </div>
 
@@ -446,35 +380,9 @@
 </section>
 
 <script>
-// ─── Brand tokens ──────────────────────────────────────────────────────────
-const NAVY  = '#0c1b33';
-const GREEN = '#34d399';
-const WHITE = '#ffffff';
-const S     = 1080;
+const S = 1080;
 
-// ─── Event constants ───────────────────────────────────────────────────────
-const EVENT = {
-  line1:    'I am attending the',
-  line2a:   'BiteLabs Digital Health,',
-  line2b:   'AI & Innovation Summit',
-  location: '📍  Miami, FL',
-  date:     '🗓  April 17th, 2026',
-};
-
-// ─── Asset manifest ────────────────────────────────────────────────────────
-const ASSET_PATHS = {
-  logo:      'assets/logo.png',
-  logoWhite: 'assets/logo-white.png',
-  sponsors:  'assets/sponsor-logos.png',
-  themes: {
-    bitelabs: 'assets/theme/BiteLabs.png',
-    london1:  'assets/theme/London-1.png',
-    london2:  'assets/theme/London-2.png',
-    usa:      'assets/theme/USA.png',
-    houston:  'assets/theme/Houston-TX.png',
-  }
-};
-
+// ─── Assets ────────────────────────────────────────────────────────────────
 const assets = {};
 
 function loadImage(name, src) {
@@ -487,15 +395,7 @@ function loadImage(name, src) {
 }
 
 async function loadAllAssets() {
-  const loads = [
-    loadImage('logo',      ASSET_PATHS.logo),
-    loadImage('logoWhite', ASSET_PATHS.logoWhite),
-    loadImage('sponsors',  ASSET_PATHS.sponsors),
-  ];
-  for (const [key, path] of Object.entries(ASSET_PATHS.themes)) {
-    loads.push(loadImage('theme_' + key, path));
-  }
-  await Promise.all(loads);
+  await loadImage('eventBg', 'assets/events/us-miami.jpg');
   document.getElementById('loadingNote').style.display = 'none';
 }
 
@@ -520,286 +420,78 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
   reader.readAsDataURL(file);
 });
 
-document.getElementById('themeSelect').addEventListener('input', renderBadge);
 document.getElementById('generateBtn').addEventListener('click', renderBadge);
 
 // ─── Main render ───────────────────────────────────────────────────────────
 function renderBadge() {
   const canvas = document.getElementById('badgeCanvas');
   const ctx    = canvas.getContext('2d');
-  const theme  = document.getElementById('themeSelect').value;
-
   ctx.clearRect(0, 0, S, S);
-  drawBackground(ctx, theme);
-  drawLogo(ctx);
-  drawPhoto(ctx, userPhoto);
-  drawEventText(ctx);
-  drawSponsors(ctx);
-  drawFooter(ctx);
+  drawBackground(ctx);
+  drawPhoto(ctx);
   enableButtons();
 }
 
-// ─── Background ────────────────────────────────────────────────────────────
-function drawBackground(ctx, theme) {
-  ctx.fillStyle = NAVY;
-  ctx.fillRect(0, 0, S, S);
-
-  const themeImg = assets['theme_' + theme];
-  if (themeImg) {
-    const { sx, sy, sw, sh } = coverFit(themeImg.width, themeImg.height, S, S);
-    ctx.drawImage(themeImg, sx, sy, sw, sh, 0, 0, S, S);
-    ctx.fillStyle = 'rgba(12,27,51,0.72)';
-    ctx.fillRect(0, 0, S, S);
+// ─── Background — full image, no overlays ──────────────────────────────────
+function drawBackground(ctx) {
+  const bg = assets['eventBg'];
+  if (bg) {
+    // Cover-fit the image to fill the full canvas exactly
+    const { sx, sy, sw, sh } = coverFit(bg.width, bg.height, S, S);
+    ctx.drawImage(bg, sx, sy, sw, sh, 0, 0, S, S);
   } else {
-    const diag = ctx.createLinearGradient(0, 0, S, S);
-    diag.addColorStop(0,    'rgba(52,211,153,0.00)');
-    diag.addColorStop(0.45, 'rgba(52,211,153,0.07)');
-    diag.addColorStop(0.75, 'rgba(52,211,153,0.13)');
-    diag.addColorStop(1,    'rgba(52,211,153,0.06)');
-    ctx.fillStyle = diag;
+    // Fallback solid navy if image hasn't loaded
+    ctx.fillStyle = '#0c1b33';
     ctx.fillRect(0, 0, S, S);
   }
+}
 
-  const br = ctx.createRadialGradient(S*.85, S*.85, 0, S*.85, S*.85, S*.55);
-  br.addColorStop(0, 'rgba(52,211,153,0.10)');
-  br.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = br; ctx.fillRect(0, 0, S, S);
+// ─── Photo — bottom-left corner ────────────────────────────────────────────
+function drawPhoto(ctx) {
+  // Position in the empty bottom-left dark area of the us-miami.jpg image
+  // The image has a clear empty navy space in the lower-left quadrant
+  const cx = 210, cy = 800, r = 155;
 
+  // Outer white ring
   ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 1;
-  for (let x = 0; x <= S; x += 90) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,S); ctx.stroke(); }
-  for (let y = 0; y <= S; y += 90) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(S,y); ctx.stroke(); }
+  ctx.beginPath(); ctx.arc(cx, cy, r + 8, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 24;
+  ctx.fill();
   ctx.restore();
 
-  const bdr = ctx.createLinearGradient(0, 0, S, S);
-  bdr.addColorStop(0,   'rgba(52,211,153,0.45)');
-  bdr.addColorStop(0.5, 'rgba(52,211,153,0.12)');
-  bdr.addColorStop(1,   'rgba(52,211,153,0.35)');
-  ctx.strokeStyle = bdr; ctx.lineWidth = 3;
-  rrect(ctx, 4, 4, S-8, S-8, 28); ctx.stroke();
-}
+  // Clip and draw photo (or placeholder)
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
 
-function rrect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
-  ctx.closePath();
-}
-
-// ─── Logo ──────────────────────────────────────────────────────────────────
-function drawLogo(ctx) {
-  const logoImg = assets['logo'];
-  const gy = 116;
-
-  if (logoImg) {
-    const maxH  = 72;
-    const scale = maxH / logoImg.height;
-    const dw    = logoImg.width  * scale;
-    const dh    = logoImg.height * scale;
-    ctx.drawImage(logoImg, S/2 - dw/2, gy - dh/2, dw, dh);
+  if (userPhoto) {
+    const { sx, sy, sw, sh } = coverFit(userPhoto.width, userPhoto.height, r * 2, r * 2);
+    ctx.drawImage(userPhoto, sx, sy, sw, sh, cx - r, cy - r, r * 2, r * 2);
   } else {
-    drawLogoFallback(ctx, gy);
-  }
-
-  ctx.font         = `700 27px 'Sora', sans-serif`;
-  ctx.fillStyle    = 'rgba(255,255,255,0.6)';
-  ctx.textAlign    = 'center';
-  ctx.textBaseline = 'top';
-  ctx.fillText('Digital Health, AI & Innovation Fellowship Programme', S/2, gy + 64);
-}
-
-function drawLogoFallback(ctx, gy) {
-  const gr = 46, gx = S/2 - 158;
-  const sph = ctx.createRadialGradient(gx-gr*.28, gy-gr*.28, gr*.05, gx, gy, gr);
-  sph.addColorStop(0,'#888aaa'); sph.addColorStop(0.25,'#4a4870');
-  sph.addColorStop(0.65,'#2d2748'); sph.addColorStop(1,'#18152e');
-  ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2);
-  ctx.fillStyle = sph; ctx.fill();
-
-  ctx.save();
-  ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2); ctx.clip();
-  ctx.beginPath();
-  ctx.moveTo(gx+gr*.18, gy-gr*1.05);
-  ctx.bezierCurveTo(gx-gr*.9,gy-gr*.5, gx+gr*.9,gy+gr*.5, gx-gr*.18,gy+gr*1.05);
-  ctx.strokeStyle='rgba(255,255,255,0.92)'; ctx.lineWidth=gr*.58; ctx.lineCap='round';
-  ctx.stroke(); ctx.restore();
-
-  ctx.font=`800 74px 'Sora', sans-serif`;
-  ctx.fillStyle=WHITE; ctx.textAlign='left'; ctx.textBaseline='middle';
-  ctx.fillText('bitelabs', gx+gr+18, gy);
-}
-
-// ─── Photo ─────────────────────────────────────────────────────────────────
-function drawPhoto(ctx, photo) {
-  const cx = 296, cy = 530, r = 210;
-
-  const glow = ctx.createRadialGradient(cx, cy, r, cx, cy, r+30);
-  glow.addColorStop(0,'rgba(52,211,153,0.45)'); glow.addColorStop(1,'rgba(52,211,153,0)');
-  ctx.beginPath(); ctx.arc(cx, cy, r+30, 0, Math.PI*2);
-  ctx.fillStyle=glow; ctx.fill();
-
-  ctx.save();
-  ctx.beginPath(); ctx.arc(cx, cy, r+10, 0, Math.PI*2);
-  ctx.fillStyle='rgba(255,255,255,0.88)';
-  ctx.shadowColor='rgba(52,211,153,0.25)'; ctx.shadowBlur=30;
-  ctx.fill(); ctx.restore();
-
-  ctx.save();
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.clip();
-
-  if (photo) {
-    const {sx,sy,sw,sh} = coverFit(photo.width, photo.height, r*2, r*2);
-    ctx.drawImage(photo, sx, sy, sw, sh, cx-r, cy-r, r*2, r*2);
-  } else {
-    const pl = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
-    pl.addColorStop(0,'#1a2d4a'); pl.addColorStop(1,'#0c1b33');
-    ctx.fillStyle=pl; ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    ctx.fillStyle='rgba(52,211,153,0.18)';
-    ctx.beginPath(); ctx.arc(cx,cy-60,75,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(cx,cy+165,150,0,Math.PI,true); ctx.fill();
-    ctx.fillStyle='rgba(52,211,153,0.35)';
-    ctx.font=`${r*.52}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('👤', cx, cy+8);
+    // Placeholder silhouette
+    ctx.fillStyle = '#1a2d4a';
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    ctx.fillStyle = 'rgba(52,211,153,0.20)';
+    ctx.beginPath(); ctx.arc(cx, cy - 50, 58, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy + 130, 120, 0, Math.PI, true); ctx.fill();
+    ctx.fillStyle = 'rgba(52,211,153,0.4)';
+    ctx.font = `${r * 0.52}px serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('👤', cx, cy + 10);
   }
   ctx.restore();
 }
 
 function coverFit(iw, ih, bw, bh) {
-  const sc = Math.max(bw/iw, bh/ih);
-  return { sx:(iw-bw/sc)/2, sy:(ih-bh/sc)/2, sw:bw/sc, sh:bh/sc };
-}
-
-// ─── Event Text (replaces name/cohort block) ───────────────────────────────
-function drawEventText(ctx) {
-  const lx   = 566;
-  let   curY = 360;
-
-  // Accent bar — tall enough to cover all event text
-  const barG = ctx.createLinearGradient(lx, curY-20, lx, curY+390);
-  barG.addColorStop(0, GREEN); barG.addColorStop(0.85, GREEN);
-  barG.addColorStop(1, 'rgba(52,211,153,0)');
-  ctx.fillStyle = barG; ctx.fillRect(lx, curY-20, 5, 390);
-
-  const tx = lx + 30;
-
-  // "I am attending the"
-  ctx.font         = `400 30px 'Sora', sans-serif`;
-  ctx.fillStyle    = 'rgba(255,255,255,0.65)';
-  ctx.textAlign    = 'left';
-  ctx.textBaseline = 'top';
-  ctx.fillText(EVENT.line1, tx, curY);
-  curY += 50;
-
-  // "BiteLabs Digital Health,"
-  ctx.font      = `800 52px 'Sora', sans-serif`;
-  ctx.fillStyle = WHITE;
-  ctx.fillText(EVENT.line2a, tx, curY);
-  curY += 68;
-
-  // "AI & Innovation Summit"
-  ctx.fillText(EVENT.line2b, tx, curY);
-  curY += 82;
-
-  // Divider line
-  ctx.strokeStyle = 'rgba(52,211,153,0.3)'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(tx, curY); ctx.lineTo(S - 58, curY); ctx.stroke();
-  curY += 32;
-
-  // Location pill
-  ctx.font      = `600 32px 'Sora', sans-serif`;
-  ctx.fillStyle = GREEN;
-  ctx.fillText(EVENT.location, tx, curY);
-  curY += 54;
-
-  // Date pill
-  ctx.fillText(EVENT.date, tx, curY);
-}
-
-// ─── Sponsors ──────────────────────────────────────────────────────────────
-function drawSponsors(ctx) {
-  const secY = 808;
-
-  ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(64,secY-20); ctx.lineTo(S-64,secY-20); ctx.stroke();
-
-  ctx.font=`600 20px 'Sora', sans-serif`; ctx.fillStyle=WHITE;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('SUPPORTED BY:', S/2, secY+4);
-
-  const stripImg = assets['sponsors'];
-  const sy = secY + 54, maxH = 48, padX = 72;
-
-  if (stripImg) {
-    const scale = Math.min(maxH / stripImg.height, (S - padX*2) / stripImg.width);
-    const dw = stripImg.width * scale, dh = stripImg.height * scale;
-    const bgPad = 20;
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.30)';
-    ctx.beginPath();
-    const bx=S/2-dw/2-bgPad, by=sy-dh/2-bgPad/2, bw=dw+bgPad*2, bh=dh+bgPad, br=16;
-    ctx.moveTo(bx+br,by); ctx.lineTo(bx+bw-br,by); ctx.quadraticCurveTo(bx+bw,by,bx+bw,by+br);
-    ctx.lineTo(bx+bw,by+bh-br); ctx.quadraticCurveTo(bx+bw,by+bh,bx+bw-br,by+bh);
-    ctx.lineTo(bx+br,by+bh); ctx.quadraticCurveTo(bx,by+bh,bx,by+bh-br);
-    ctx.lineTo(bx,by+br); ctx.quadraticCurveTo(bx,by,bx+br,by);
-    ctx.closePath(); ctx.fill(); ctx.restore();
-    ctx.drawImage(stripImg, S/2-dw/2, sy-dh/2, dw, dh);
-  } else {
-    const fallbacks = [
-      {text:'RATHBONES',color:'rgba(255,255,255,0.82)'},{text:'Prova Health',color:'#93c5fd'},
-      {text:'Candesic',color:GREEN},{text:'Doyle Clayton',color:'rgba(255,255,255,0.82)'},
-      {text:'aws activate',color:'#fbbf24'},{text:'SEEDLEGALS',color:'#6ee7b7'},{text:'EWOR',color:'#c4b5fd'},
-    ];
-    const gap = (S - 140) / (fallbacks.length - 1);
-    fallbacks.forEach((f, i) => {
-      ctx.font=`700 19px 'Sora',sans-serif`; ctx.fillStyle=f.color;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(f.text, 70+i*gap, sy);
-    });
-  }
-}
-
-// ─── Footer ────────────────────────────────────────────────────────────────
-function drawFooter(ctx) {
-  const stripY = S-112, stripH = 112;
-
-  ctx.save();
-  ctx.beginPath();
-  ctx.moveTo(7, stripY); ctx.lineTo(S-7, stripY);
-  ctx.lineTo(S-7, S-28); ctx.quadraticCurveTo(S-7,S-7,S-28,S-7);
-  ctx.lineTo(28, S-7); ctx.quadraticCurveTo(7,S-7,7,S-28);
-  ctx.closePath();
-  ctx.fillStyle=GREEN; ctx.fill(); ctx.restore();
-
-  ctx.font=`600 20px 'Sora', sans-serif`; ctx.fillStyle='rgba(12,27,51,0.65)';
-  ctx.textAlign='left'; ctx.textBaseline='middle';
-  ctx.fillText('APPLY NOW AT', 72, stripY+34);
-  ctx.font=`800 28px 'Sora', sans-serif`; ctx.fillStyle=NAVY;
-  ctx.fillText('WWW.BITELABS.IO', 72, stripY+74);
-
-  const logoImg = assets['logoWhite'];
-  const lx = S-72, ly = stripY+stripH/2;
-  if (logoImg) {
-    const maxH=56, scale=maxH/logoImg.height;
-    const dw=logoImg.width*scale, dh=logoImg.height*scale;
-    ctx.save(); ctx.globalAlpha=0.85;
-    ctx.drawImage(logoImg, lx-dw, ly-dh/2, dw, dh);
-    ctx.restore();
-  } else {
-    const er=28;
-    const sg=ctx.createRadialGradient(lx-er*.3,ly-er*.3,er*.05,lx,ly,er);
-    sg.addColorStop(0,'rgba(12,27,51,0.35)'); sg.addColorStop(1,'rgba(12,27,51,0.08)');
-    ctx.beginPath(); ctx.arc(lx,ly,er,0,Math.PI*2);
-    ctx.fillStyle=sg; ctx.fill();
-  }
+  const sc = Math.max(bw / iw, bh / ih);
+  return { sx: (iw - bw / sc) / 2, sy: (ih - bh / sc) / 2, sw: bw / sc, sh: bh / sc };
 }
 
 // ─── Buttons ───────────────────────────────────────────────────────────────
 function enableButtons() {
   document.getElementById('downloadBtn').disabled = false;
   const li = document.getElementById('linkedinBtn');
-  li.style.pointerEvents='auto'; li.style.opacity='1';
+  li.style.pointerEvents = 'auto'; li.style.opacity = '1';
 }
 
 document.getElementById('downloadBtn').addEventListener('click', () => {
@@ -830,7 +522,7 @@ document.getElementById('linkedinBtn').addEventListener('click', async function(
 function buildPostText() {
   return (
     `🌟 Excited to share that I'll be attending the @BiteLabs Digital Health, AI & Innovation Summit!\n\n` +
-    `📍 Miami, FL  |  🗓 April 17th, 2026\n\n` +
+    `📍 Jones Day, Miami, FL  |  🗓 Friday, April 17th, 2026\n\n` +
     `This is set to be an incredible day bringing together the brightest minds at the intersection of healthcare, AI, and technology. If you're attending, let's connect!\n\n` +
     `#BiteLabs #DigitalHealth #AI #HealthTech #Innovation #HealthcareInnovation #Miami #Summit2026`
   );
@@ -850,7 +542,7 @@ document.getElementById('copyPostBtn').addEventListener('click', async () => {
     await navigator.clipboard.writeText(buildPostText());
   } catch(_) {
     const ta = document.createElement('textarea');
-    ta.value = buildPostText(); ta.style.position='fixed'; ta.style.opacity='0';
+    ta.value = buildPostText(); ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select();
     document.execCommand('copy'); document.body.removeChild(ta);
   }
