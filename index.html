@@ -6,7 +6,7 @@
   <title>BiteLabs Badge Maker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -199,7 +199,7 @@
     }
 
     canvas {
-      border-radius: 20px;
+      border-radius: 0;
       box-shadow: 0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
       max-width: 520px; width: 100%; height: auto;
     }
@@ -357,9 +357,7 @@
     <label>Cohort</label>
     <select id="cohortSelect">
       <option value="Winter 2026">Winter 2026</option>
-      <option value="Summer 2026">Summer 2026</option>
-      <option value="Winter 2027">Winter 2027</option>
-      <option value="Summer 2027">Summer 2027</option>
+      <option value="Summer 2026" selected>Summer 2026</option>
     </select>
 
     <label>Badge Theme</label>
@@ -449,18 +447,21 @@
 </section>
 
 <script>
-// ─── Brand tokens ──────────────────────────────────────────────────────────
-const NAVY  = '#0c1b33';
-const GREEN = '#34d399';
-const WHITE = '#ffffff';
-const S     = 1080;
+// ─── Brand tokens (BiteLabs Brand Kit v4.0) ─────────────────────────────────
+const NAVY          = '#0C1B33';
+const EMERALD       = '#10B981';   // primary accent
+const EMERALD_LIGHT = '#34D399';   // gradient ends / glow only
+const EMERALD_DARK  = '#059669';
+const WHITE         = '#ffffff';
+const S             = 1080;
 
 // ─── Asset manifest ────────────────────────────────────────────────────────
-// Drop your image files into the assets/ folder using these exact names.
 const ASSET_PATHS = {
   logo:      'assets/logo.png',
   logoWhite: 'assets/logo-white.png',
-  sponsors:  'assets/sponsor-logos.png',
+  dotGrid:   'assets/brand/dot-grid.png',
+  arc:       'assets/brand/arc.png',
+  sponsors:  'assets/sponsor-logos.png?v=2',
   themes: {
     bitelabs: 'assets/theme/BiteLabs.png',
     london1:  'assets/theme/London-1.png',
@@ -486,13 +487,38 @@ async function loadAllAssets() {
   const loads = [
     loadImage('logo',      ASSET_PATHS.logo),
     loadImage('logoWhite', ASSET_PATHS.logoWhite),
+    loadImage('dotGrid',   ASSET_PATHS.dotGrid),
+    loadImage('arcRaw',    ASSET_PATHS.arc),
     loadImage('sponsors',  ASSET_PATHS.sponsors),
   ];
   for (const [key, path] of Object.entries(ASSET_PATHS.themes)) {
     loads.push(loadImage('theme_' + key, path));
   }
   await Promise.all(loads);
+
+  // The arc primitive ships on a solid black background — key that out to alpha
+  // so it composites cleanly over navy and the theme photos.
+  if (assets['arcRaw']) assets['arc'] = keyOutBlack(assets['arcRaw']);
+
   document.getElementById('loadingNote').style.display = 'none';
+}
+
+// Turn a black-background image into a transparent one (smooth edges via luminance).
+function keyOutBlack(img) {
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth || img.width;
+  c.height = img.naturalHeight || img.height;
+  const x = c.getContext('2d');
+  x.drawImage(img, 0, 0);
+  const id = x.getImageData(0, 0, c.width, c.height);
+  const d = id.data;
+  const lo = 10, hi = 60;   // sum(rgb) below lo → transparent, above hi → opaque
+  for (let i = 0; i < d.length; i += 4) {
+    const sum = d[i] + d[i+1] + d[i+2];
+    d[i+3] = sum <= lo ? 0 : sum >= hi ? 255 : Math.round(((sum - lo) / (hi - lo)) * 255);
+  }
+  x.putImageData(id, 0, 0);
+  return c;
 }
 
 // ─── Photo upload ──────────────────────────────────────────────────────────
@@ -526,143 +552,127 @@ function renderBadge() {
 
   ctx.clearRect(0, 0, S, S);
   drawBackground(ctx, theme);
-  drawLogo(ctx);
+  drawTopHeader(ctx);
+  ctx.save();
+  ctx.translate(0, 60);    // shift the middle block (photo + content) down
   drawPhoto(ctx, userPhoto);
-  drawNameCohort(ctx, name, cohort);
-  drawSponsors(ctx);
-  drawFooter(ctx);
+  drawContent(ctx, name, cohort);
+  ctx.restore();
+  drawSponsorFooter(ctx);  // full-width white footer bar with all logos
+  drawFooterLogo(ctx);
+  drawUrlPill(ctx);
   enableButtons();
 }
 
-// ─── Background ────────────────────────────────────────────────────────────
+// ─── Top header — bitelabs logo + programme subheading (centred) ────────────
+function drawTopHeader(ctx) {
+  const logoImg = assets['logo'] || assets['logoWhite'];
+  if (logoImg) {
+    const maxH  = 56;
+    const scale = maxH / logoImg.height;
+    const dw = logoImg.width * scale, dh = logoImg.height * scale;
+    ctx.drawImage(logoImg, S/2 - dw/2, 110 - dh/2, dw, dh);
+  }
+
+  ctx.font = `500 23px 'DM Sans', sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.62)';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('Digital Health, AI & Innovation Fellowship Programme', S/2, 180);
+}
+
+// ─── Background — navy (+ optional theme photo) + deco circles + dot grid ────
 function drawBackground(ctx, theme) {
-  // Base navy fill
+  // Deep navy base
   ctx.fillStyle = NAVY;
   ctx.fillRect(0, 0, S, S);
 
+  // Optional theme photo as a subtle, heavily-overlaid textured backdrop
   const themeImg = assets['theme_' + theme];
   if (themeImg) {
-    // Draw theme photo cover-fit
     const { sx, sy, sw, sh } = coverFit(themeImg.width, themeImg.height, S, S);
     ctx.drawImage(themeImg, sx, sy, sw, sh, 0, 0, S, S);
-
-    // Dark navy overlay so text stays readable
-    ctx.fillStyle = 'rgba(12,27,51,0.72)';
-    ctx.fillRect(0, 0, S, S);
-  } else {
-    // No theme image — use gradient fallback
-    const diag = ctx.createLinearGradient(0, 0, S, S);
-    diag.addColorStop(0,    'rgba(52,211,153,0.00)');
-    diag.addColorStop(0.45, 'rgba(52,211,153,0.07)');
-    diag.addColorStop(0.75, 'rgba(52,211,153,0.13)');
-    diag.addColorStop(1,    'rgba(52,211,153,0.06)');
-    ctx.fillStyle = diag;
+    ctx.fillStyle = theme === 'bitelabs'
+      ? 'rgba(12,27,51,0.46)'    // plain theme — lighter so the teal wave reads
+      : 'rgba(12,27,51,0.64)';   // photo themes
     ctx.fillRect(0, 0, S, S);
   }
 
-  // Emerald radial bloom (always)
-  const br = ctx.createRadialGradient(S*.85, S*.85, 0, S*.85, S*.85, S*.55);
-  br.addColorStop(0, 'rgba(52,211,153,0.10)');
-  br.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = br;
-  ctx.fillRect(0, 0, S, S);
+  // Extra ambient richness for the plain BiteLabs theme (brand "ambient glow")
+  if (theme === 'bitelabs') {
+    let g = ctx.createRadialGradient(S*0.82, S*0.18, 0, S*0.82, S*0.18, S*0.72);
+    g.addColorStop(0,   'rgba(16,185,129,0.18)');
+    g.addColorStop(0.5, 'rgba(16,185,129,0.05)');
+    g.addColorStop(1,   'rgba(16,185,129,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
 
-  // Subtle grid
+    g = ctx.createRadialGradient(S*0.10, S*0.92, 0, S*0.10, S*0.92, S*0.60);
+    g.addColorStop(0, 'rgba(20,184,166,0.12)');
+    g.addColorStop(1, 'rgba(20,184,166,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  }
+
+  // Arc primitive — hero flourish sweeping across the upper background
+  const arc = assets['arc'];
+  if (arc) {
+    const w = S * 1.12, h = w * arc.height / arc.width;
+    ctx.save();
+    if (themeImg) ctx.globalAlpha = 0.75;   // dim the arc when a theme photo sits behind it
+    ctx.drawImage(arc, (S - w) / 2 + 130, S - h + 90, w, h);
+    ctx.restore();
+  }
+
+  // Dot-grid primitive, bottom-right (lighten-blended so the black bg drops out)
+  const dg = assets['dotGrid'];
+  if (dg) {
+    const w = S * 0.30, h = w * dg.height / dg.width;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighten';
+    ctx.globalAlpha = 0.6;
+    ctx.drawImage(dg, S - w - 18, S - h - 36, w, h);
+    ctx.restore();
+  }
+}
+
+function ringCircle(ctx, cx, cy, r, lw, color, alpha) {
   ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-  ctx.lineWidth = 1;
-  for (let x = 0; x <= S; x += 90) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,S); ctx.stroke(); }
-  for (let y = 0; y <= S; y += 90) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(S,y); ctx.stroke(); }
+  ctx.globalAlpha = alpha;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.lineWidth = lw; ctx.strokeStyle = color; ctx.stroke();
   ctx.restore();
-
-  // Emerald border
-  const bdr = ctx.createLinearGradient(0, 0, S, S);
-  bdr.addColorStop(0,   'rgba(52,211,153,0.45)');
-  bdr.addColorStop(0.5, 'rgba(52,211,153,0.12)');
-  bdr.addColorStop(1,   'rgba(52,211,153,0.35)');
-  ctx.strokeStyle = bdr;
-  ctx.lineWidth   = 3;
-  rrect(ctx, 4, 4, S-8, S-8, 28);
-  ctx.stroke();
 }
 
-function rrect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
-  ctx.closePath();
-}
-
-// ─── Logo ──────────────────────────────────────────────────────────────────
-function drawLogo(ctx) {
-  const logoImg = assets['logo'];
-  const gy = 116;  // vertical centre of logo area
-
+// ─── Footer logo (bottom-left) ──────────────────────────────────────────────
+function drawFooterLogo(ctx) {
+  const logoImg = assets['logoWhite'] || assets['logo'];
+  const ly = S - 118 - 86;   // sit above the white sponsor bar, with a gap
   if (logoImg) {
-    // Draw logo.png at top, centered, max height 72px
-    const maxH  = 72;
+    const maxH  = 52;
     const scale = maxH / logoImg.height;
     const dw    = logoImg.width  * scale;
     const dh    = logoImg.height * scale;
-    ctx.drawImage(logoImg, S/2 - dw/2, gy - dh/2, dw, dh);
+    ctx.drawImage(logoImg, 56, ly - dh/2, dw, dh);
   } else {
-    // Canvas fallback
-    drawLogoFallback(ctx, gy);
+    ctx.font = `700 44px 'Sora', sans-serif`;
+    ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('bitelabs', 56, ly);
   }
-
-  // Subtitle (always shown)
-  ctx.font         = `700 27px 'Sora', sans-serif`;
-  ctx.fillStyle    = 'rgba(255,255,255,0.6)';
-  ctx.textAlign    = 'center';
-  ctx.textBaseline = 'top';
-  ctx.fillText('Digital Health, AI & Innovation Fellowship Programme', S/2, gy + 64);
 }
 
-function drawLogoFallback(ctx, gy) {
-  const gr = 46, gx = S/2 - 158;
-
-  const sph = ctx.createRadialGradient(gx-gr*.28, gy-gr*.28, gr*.05, gx, gy, gr);
-  sph.addColorStop(0, '#888aaa'); sph.addColorStop(0.25, '#4a4870');
-  sph.addColorStop(0.65,'#2d2748'); sph.addColorStop(1,'#18152e');
-  ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2);
-  ctx.fillStyle = sph; ctx.fill();
-
-  const spec = ctx.createRadialGradient(gx-gr*.4, gy-gr*.4, 0, gx-gr*.4, gy-gr*.4, gr*.55);
-  spec.addColorStop(0,'rgba(255,255,255,0.18)'); spec.addColorStop(1,'rgba(255,255,255,0)');
-  ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2);
-  ctx.fillStyle = spec; ctx.fill();
-
-  ctx.save();
-  ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI*2); ctx.clip();
-  ctx.beginPath();
-  ctx.moveTo(gx+gr*.18, gy-gr*1.05);
-  ctx.bezierCurveTo(gx-gr*.9, gy-gr*.5, gx+gr*.9, gy+gr*.5, gx-gr*.18, gy+gr*1.05);
-  ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-  ctx.lineWidth   = gr * .58;
-  ctx.lineCap     = 'round';
-  ctx.stroke();
-  ctx.restore();
-
-  ctx.font = `800 74px 'Sora', sans-serif`;
-  ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  ctx.fillText('bitelabs', gx + gr + 18, gy);
-}
-
-// ─── Photo ─────────────────────────────────────────────────────────────────
+// ─── Photo — large circular portrait, left ──────────────────────────────────
 function drawPhoto(ctx, photo) {
-  const cx = 296, cy = 530, r = 210;
+  const cx = 322, cy = 470, r = 238;
 
-  const glow = ctx.createRadialGradient(cx, cy, r, cx, cy, r+30);
-  glow.addColorStop(0,'rgba(52,211,153,0.45)'); glow.addColorStop(1,'rgba(52,211,153,0)');
-  ctx.beginPath(); ctx.arc(cx, cy, r+30, 0, Math.PI*2);
+  // Emerald glow
+  const glow = ctx.createRadialGradient(cx, cy, r, cx, cy, r+36);
+  glow.addColorStop(0,'rgba(16,185,129,0.45)'); glow.addColorStop(1,'rgba(16,185,129,0)');
+  ctx.beginPath(); ctx.arc(cx, cy, r+36, 0, Math.PI*2);
   ctx.fillStyle = glow; ctx.fill();
 
+  // White ring
   ctx.save();
   ctx.beginPath(); ctx.arc(cx, cy, r+10, 0, Math.PI*2);
-  ctx.fillStyle='rgba(255,255,255,0.88)';
-  ctx.shadowColor='rgba(52,211,153,0.25)'; ctx.shadowBlur=30;
+  ctx.fillStyle='#ffffff';
+  ctx.shadowColor='rgba(0,0,0,0.45)'; ctx.shadowBlur=30;
   ctx.fill(); ctx.restore();
 
   ctx.save();
@@ -673,14 +683,11 @@ function drawPhoto(ctx, photo) {
     ctx.drawImage(photo, sx, sy, sw, sh, cx-r, cy-r, r*2, r*2);
   } else {
     const pl = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
-    pl.addColorStop(0,'#1a2d4a'); pl.addColorStop(1,'#0c1b33');
+    pl.addColorStop(0,'#1A2D4A'); pl.addColorStop(1,'#0C1B33');
     ctx.fillStyle=pl; ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    ctx.fillStyle='rgba(52,211,153,0.18)';
-    ctx.beginPath(); ctx.arc(cx,cy-60,75,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(cx,cy+165,150,0,Math.PI,true); ctx.fill();
-    ctx.fillStyle='rgba(52,211,153,0.35)';
-    ctx.font=`${r*.52}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('👤', cx, cy+8);
+    ctx.fillStyle='rgba(16,185,129,0.20)';
+    ctx.beginPath(); ctx.arc(cx,cy-72,92,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy+200,176,0,Math.PI,true); ctx.fill();
   }
   ctx.restore();
 }
@@ -690,22 +697,66 @@ function coverFit(iw, ih, bw, bh) {
   return { sx:(iw-bw/sc)/2, sy:(ih-bh/sc)/2, sw:bw/sc, sh:bh/sc };
 }
 
-// ─── Name + Cohort ─────────────────────────────────────────────────────────
-function drawNameCohort(ctx, name, cohort) {
-  const lx = 566, nameY = 430;
+// ─── Content (right) — overline + name + cohort ─────────────────────────────
+function drawContent(ctx, name, cohort) {
+  const lx   = 596;            // left edge of text column
+  const maxW = S - lx - 56;    // wrap width
 
-  const barG = ctx.createLinearGradient(lx, nameY-20, lx, nameY+280);
-  barG.addColorStop(0, GREEN); barG.addColorStop(0.8, GREEN);
-  barG.addColorStop(1,'rgba(52,211,153,0)');
-  ctx.fillStyle = barG; ctx.fillRect(lx, nameY-20, 5, 280);
+  // Overline label (DM Sans, emerald, wide tracking)
+  ctx.font = `600 20px 'DM Sans', sans-serif`;
+  ctx.fillStyle = EMERALD; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  drawTracked(ctx, 'DIGITAL HEALTH · AI · INNOVATION', lx, 286, 3.4);
 
-  wrapText(ctx, name, lx+30, nameY, S-lx-58, 76, WHITE, `800 64px 'Sora', sans-serif`);
+  // Name (Sora 700, emerald)
+  const nameFont = `700 70px 'Sora', sans-serif`;
+  const nameY = 332;
+  wrapText(ctx, name, lx, nameY, maxW, 76, EMERALD, nameFont);
+  const lines = countLines(ctx, name, maxW, nameFont);
+  let y = nameY + lines * 76 + 22;
 
-  const lines = countLines(ctx, name, S-lx-58, `800 64px 'Sora', sans-serif`);
-  const cohortY = nameY + lines * 76 + 24;
-  ctx.font=`600 40px 'Sora', sans-serif`; ctx.fillStyle=GREEN;
-  ctx.textAlign='left'; ctx.textBaseline='top';
-  ctx.fillText(cohort, lx+30, cohortY);
+  // Cohort / role (Sora 700, white)
+  ctx.font = `700 40px 'Sora', sans-serif`;
+  ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(cohort + ' Fellow', lx, y);
+}
+
+// Draw text with extra letter-spacing (px). Uses the ctx font/fill set by caller.
+function drawTracked(ctx, text, x, y, spacing) {
+  let cx = x;
+  for (const ch of text) {
+    ctx.fillText(ch, cx, y);
+    cx += ctx.measureText(ch).width + spacing;
+  }
+}
+
+// Centred tracked text (for the SUPPORTED BY label).
+function drawTrackedCenter(ctx, text, cx, y, spacing) {
+  let total = 0;
+  for (const ch of text) total += ctx.measureText(ch).width + spacing;
+  total -= spacing;
+  let x = cx - total / 2;
+  const prev = ctx.textAlign; ctx.textAlign = 'left';
+  for (const ch of text) { ctx.fillText(ch, x, y); x += ctx.measureText(ch).width + spacing; }
+  ctx.textAlign = prev;
+}
+
+// ─── Sponsors — compact, centred strip on a bright pill ─────────────────────
+function drawSponsorFooter(ctx) {
+  const barH = 118;
+  const barY = S - barH;
+
+  // Full-width white bar (square corners)
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, barY, S, barH);
+
+  // Sponsor logos centred in the bar
+  const strip = assets['sponsors'];
+  if (strip) {
+    const maxH = 54, padX = 70;
+    const scale = Math.min(maxH / strip.height, (S - padX*2) / strip.width);
+    const dw = strip.width * scale, dh = strip.height * scale;
+    ctx.drawImage(strip, S/2 - dw/2, barY + barH/2 - dh/2, dw, dh);
+  }
 }
 
 function countLines(ctx, text, maxW, font) {
@@ -729,114 +780,48 @@ function wrapText(ctx, text, x, y, maxW, lh, color, font) {
   if (line) ctx.fillText(line, x, cy);
 }
 
-// ─── Sponsors ──────────────────────────────────────────────────────────────
-function drawSponsors(ctx) {
-  const secY = 808;
+// ─── URL pill (bottom-right) ────────────────────────────────────────────────
+function drawUrlPill(ctx) {
+  ctx.font = `700 24px 'DM Sans', sans-serif`;
+  const text = 'www.bitelabs.io';
+  const tw   = ctx.measureText(text).width;
 
-  ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(64,secY-20); ctx.lineTo(S-64,secY-20); ctx.stroke();
+  const padL = 32, gap = 16, arrowR = 18, padR = 20, pillH = 64;
+  const pillW = padL + tw + gap + arrowR*2 + padR;
+  const px = S - 56 - pillW;
+  const py = S - 118 - 86 - pillH/2;   // sit above the white sponsor bar, with a gap
 
-  ctx.font=`600 20px 'Sora', sans-serif`; ctx.fillStyle=WHITE;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('SUPPORTED BY:', S/2, secY+4);
+  // Pill
+  ctx.fillStyle = EMERALD;
+  roundRect(ctx, px, py, pillW, pillH, pillH/2);
+  ctx.fill();
 
-  const stripImg = assets['sponsors'];
-  const sy = secY + 54;
-  const maxH = 48;
-  const padX = 72;
+  // Text (navy)
+  ctx.fillStyle = NAVY; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, px + padL, py + pillH/2 + 1);
 
-  if (stripImg) {
-    // Scale image to fit the sponsor row, preserving aspect ratio
-    const scale = Math.min(maxH / stripImg.height, (S - padX*2) / stripImg.width);
-    const dw = stripImg.width  * scale;
-    const dh = stripImg.height * scale;
-
-    // Low opacity white background pill behind logos
-    const bgPad = 20;
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.22)';
-    ctx.beginPath();
-    const bx = S/2 - dw/2 - bgPad, by = sy - dh/2 - bgPad/2;
-    const bw = dw + bgPad*2,        bh = dh + bgPad;
-    const br = 16;
-    ctx.moveTo(bx+br, by);
-    ctx.lineTo(bx+bw-br, by); ctx.quadraticCurveTo(bx+bw, by, bx+bw, by+br);
-    ctx.lineTo(bx+bw, by+bh-br); ctx.quadraticCurveTo(bx+bw, by+bh, bx+bw-br, by+bh);
-    ctx.lineTo(bx+br, by+bh); ctx.quadraticCurveTo(bx, by+bh, bx, by+bh-br);
-    ctx.lineTo(bx, by+br); ctx.quadraticCurveTo(bx, by, bx+br, by);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    ctx.drawImage(stripImg, S/2 - dw/2, sy - dh/2, dw, dh);
-  } else {
-    // Text fallback
-    const fallbacks = [
-      { text:'RATHBONES',    font:`700 19px 'Sora',serif`,      color:'rgba(255,255,255,0.82)' },
-      { text:'Prova Health', font:`700 19px 'Sora',sans-serif`,  color:'#93c5fd' },
-      { text:'Candesic',     font:`600 19px 'Sora',sans-serif`,  color:GREEN },
-      { text:'Doyle Clayton',font:`700 19px 'Sora',sans-serif`,  color:'rgba(255,255,255,0.82)' },
-      { text:'aws activate', font:`600 18px 'Sora',sans-serif`,  color:'#fbbf24' },
-      { text:'SEEDLEGALS',   font:`600 19px 'Sora',sans-serif`,  color:'#6ee7b7' },
-      { text:'EWOR',         font:`700 19px 'Sora',sans-serif`,  color:'#c4b5fd' },
-    ];
-    const gap = (S - 140) / (fallbacks.length - 1);
-    fallbacks.forEach((f, i) => {
-      ctx.font=f.font; ctx.fillStyle=f.color;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(f.text, 70 + i*gap, sy);
-    });
-  }
+  // Arrow circle (navy outline + up-right arrow)
+  const acx = px + padL + tw + gap + arrowR;
+  const acy = py + pillH/2;
+  ctx.save();
+  ctx.strokeStyle = NAVY; ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.arc(acx, acy, arrowR, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(acx - 6, acy + 6); ctx.lineTo(acx + 6, acy - 6);
+  ctx.moveTo(acx + 0, acy - 6); ctx.lineTo(acx + 6, acy - 6); ctx.lineTo(acx + 6, acy - 0);
+  ctx.stroke();
+  ctx.restore();
 }
 
-// ─── Footer ────────────────────────────────────────────────────────────────
-function drawFooter(ctx) {
-  const stripY = S - 112, stripH = 112;
-
-  // Green strip
-  ctx.save();
+function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
-  ctx.moveTo(7, stripY);
-  ctx.lineTo(S-7, stripY);
-  ctx.lineTo(S-7, S-28); ctx.quadraticCurveTo(S-7,S-7,S-28,S-7);
-  ctx.lineTo(28, S-7); ctx.quadraticCurveTo(7,S-7,7,S-28);
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
   ctx.closePath();
-  ctx.fillStyle = GREEN; ctx.fill();
-  ctx.restore();
-
-  // "APPLY NOW AT"
-  ctx.font=`600 20px 'Sora', sans-serif`; ctx.fillStyle='rgba(12,27,51,0.65)';
-  ctx.textAlign='left'; ctx.textBaseline='middle';
-  ctx.fillText('APPLY NOW AT', 72, stripY+34);
-
-  // URL
-  ctx.font=`800 28px 'Sora', sans-serif`; ctx.fillStyle=NAVY;
-  ctx.fillText('WWW.BITELABS.IO', 72, stripY+74);
-
-  // ── Logo in bottom-right of strip ──
-  const logoImg = assets['logoWhite'];
-  const lx = S - 72, ly = stripY + stripH/2;
-
-  if (logoImg) {
-    // Draw just the sphere portion (square crop from left of logo)
-    // We draw the full logo scaled small and right-aligned
-    const maxH  = 56;
-    const scale = maxH / logoImg.height;
-    const dw    = logoImg.width * scale;
-    const dh    = logoImg.height * scale;
-    // Right-align: draw so right edge is at lx
-    ctx.save();
-    ctx.globalAlpha = 0.85;
-    ctx.drawImage(logoImg, lx - dw, ly - dh/2, dw, dh);
-    ctx.restore();
-  } else {
-    // Fallback: draw small decorative sphere
-    const er = 28;
-    const sg = ctx.createRadialGradient(lx-er*.3, ly-er*.3, er*.05, lx, ly, er);
-    sg.addColorStop(0,'rgba(12,27,51,0.35)'); sg.addColorStop(1,'rgba(12,27,51,0.08)');
-    ctx.beginPath(); ctx.arc(lx, ly, er, 0, Math.PI*2);
-    ctx.fillStyle=sg; ctx.fill();
-  }
 }
 
 // ─── Enable buttons ────────────────────────────────────────────────────────
@@ -905,10 +890,19 @@ function getPostText() { return buildPostText(); }
 
 // ─── Boot ──────────────────────────────────────────────────────────────────
 (async () => {
-  await Promise.all([
-    document.fonts.ready,
-    loadAllAssets()
-  ]);
+  await loadAllAssets();
+  // Ensure the exact canvas fonts are loaded before first paint
+  try {
+    await Promise.all([
+      document.fonts.load(`700 70px 'Sora'`),
+      document.fonts.load(`700 40px 'Sora'`),
+      document.fonts.load(`600 20px 'DM Sans'`),
+      document.fonts.load(`700 24px 'DM Sans'`),
+      document.fonts.load(`500 23px 'DM Sans'`),
+      document.fonts.load(`400 22px 'DM Sans'`),
+    ]);
+  } catch (_) {}
+  await document.fonts.ready;
   renderBadge();
   renderPostTemplate();
 })();
