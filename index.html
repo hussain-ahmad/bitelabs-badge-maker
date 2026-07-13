@@ -716,10 +716,13 @@ function drawContent(ctx, name, cohort) {
   const lines = countLines(ctx, name, maxW, nameFont);
   let y = nameY + lines * 76 + 22;
 
-  // Cohort / role (Sora 700, white)
+  // Cohort (Sora 700, white)
   ctx.font = `700 40px 'Sora', sans-serif`;
   ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  ctx.fillText(cohort + ' Fellow', lx, y);
+  ctx.fillText(cohort, lx, y);
+  
+  // Fellow on new line (Sora 700, white)
+  ctx.fillText('Fellow', lx, y + 48);
 }
 
 // Draw text with extra letter-spacing (px). Uses the ctx font/fill set by caller.
