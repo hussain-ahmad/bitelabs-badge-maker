@@ -463,7 +463,7 @@ const WHITE         = '#ffffff';
 const S             = 1080;
 
 // ─── Event details (single source of truth — update here) ───────────────────
-const EVENT_NAME  = 'Digital Health & Innovation Summit';
+const EVENT_NAME  = 'Digital Health, AI & Innovation Summit';
 const EVENT_CITY  = 'Houston, TX';
 const EVENT_YEAR  = '2026';
 const EVENT_DATE  = 'August 27, 2026';        // Thursday
@@ -582,16 +582,11 @@ function renderBadge() {
 function drawTopHeader(ctx) {
   const logoImg = assets['logo'] || assets['logoWhite'];
   if (logoImg) {
-    const maxH  = 56;
+    const maxH  = 58;
     const scale = maxH / logoImg.height;
     const dw = logoImg.width * scale, dh = logoImg.height * scale;
-    ctx.drawImage(logoImg, S/2 - dw/2, 110 - dh/2, dw, dh);
+    ctx.drawImage(logoImg, S/2 - dw/2, 130 - dh/2, dw, dh);
   }
-
-  ctx.font = `500 23px 'DM Sans', sans-serif`;
-  ctx.fillStyle = 'rgba(255,255,255,0.62)';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(EVENT_NAME, S/2, 180);
 }
 
 // ─── Background — navy (+ optional theme photo) + deco circles + dot grid ────
@@ -715,32 +710,45 @@ function coverFit(iw, ih, bw, bh) {
 // ─── Content (right) — overline + name + cohort ─────────────────────────────
 function drawContent(ctx, name) {
   const lx   = 596;            // left edge of text column
-  const maxW = S - lx - 56;    // wrap width
+  const maxW = S - lx - 40;    // wrap width
+  let y = 268;
 
-  // Overline label (DM Sans, emerald, wide tracking)
-  ctx.font = `600 20px 'DM Sans', sans-serif`;
+  // "I AM ATTENDING THE" highlight pill (emerald block, navy bold text)
+  ctx.font = `700 22px 'DM Sans', sans-serif`;
+  const label = 'I AM ATTENDING THE';
+  const lw = ctx.measureText(label).width;
+  const padX = 15, pillH = 40;
+  ctx.fillStyle = EMERALD;
+  roundRect(ctx, lx, y, lw + padX*2, pillH, 9);
+  ctx.fill();
+  ctx.fillStyle = NAVY; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, lx + padX, y + pillH/2 + 1);
+  y += pillH + 22;
+
+  // Event headline (big, bold, white — with the location accent in emerald)
+  ctx.textBaseline = 'top';
+  const headFont = `800 46px 'Sora', sans-serif`;
+  wrapText(ctx, EVENT_NAME, lx, y, maxW, 52, WHITE, headFont);
+  const hLines = countLines(ctx, EVENT_NAME, maxW, headFont);
+  y += hLines * 52 + 14;
+
+  // Location (emerald, bold)
+  ctx.font = `800 34px 'Sora', sans-serif`;
   ctx.fillStyle = EMERALD; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  drawTracked(ctx, 'HOUSTON · TEXAS · ' + EVENT_YEAR, lx, 286, 3.0);
-
-  // Name (Sora 700, emerald)
-  const nameFont = `700 66px 'Sora', sans-serif`;
-  const nameY = 332;
-  wrapText(ctx, name, lx, nameY, maxW, 72, EMERALD, nameFont);
-  const lines = countLines(ctx, name, maxW, nameFont);
-  let y = nameY + lines * 72 + 20;
-
-  // Role (Sora 700, white)
-  ctx.font = `700 40px 'Sora', sans-serif`;
-  ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  ctx.fillText('Summit Attendee', lx, y);
-  y += 56;
+  ctx.fillText('Houston, Texas', lx, y);
+  y += 50;
 
   // Date + venue (DM Sans, muted white)
-  ctx.font = `500 21px 'DM Sans', sans-serif`;
-  ctx.fillStyle = 'rgba(255,255,255,0.72)';
+  ctx.font = `500 20px 'DM Sans', sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.62)';
   ctx.fillText(EVENT_DATE, lx, y);
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.fillText(EVENT_VENUE, lx, y + 30);
+  ctx.fillText(EVENT_VENUE, lx, y + 28);
+  y += 68;
+
+  // Attendee name credit
+  ctx.font = `600 24px 'DM Sans', sans-serif`;
+  ctx.fillStyle = (name && name !== 'Your Name') ? WHITE : 'rgba(255,255,255,0.45)';
+  ctx.fillText('— ' + name, lx, y);
 }
 
 // Draw text with extra letter-spacing (px). Uses the ctx font/fill set by caller.
@@ -892,7 +900,7 @@ document.getElementById('linkedinBtn').addEventListener('click', function(e) {
 // ─── Post template ─────────────────────────────────────────────────────────
 function buildPostText() {
   return (
-    `🌟 Excited to share that I'll be attending the @BiteLabs Digital Health & Innovation Summit in Houston!\n\n` +
+    `🌟 Excited to share that I'll be attending the @BiteLabs Digital Health, AI & Innovation Summit in Houston!\n\n` +
     `📍 ${EVENT_VENUE}, ${EVENT_CITY}  |  🗓 ${EVENT_DATE}\n\n` +
     `A full day at the intersection of healthcare, AI, and innovation — expert panels, fellow pitches, a healthtech shark tank, and brilliant people to connect with. If you're going, let's meet up! 🤝\n\n` +
     `👉 Register here: ${EVENT_LUMA}\n\n` +
@@ -904,8 +912,8 @@ function renderPostTemplate() {
   const raw = buildPostText();
   // Highlight LinkedIn tag and hashtags for display
   const html = raw
-    .replace(/@BiteLabs Digital Health & Innovation Summit/g,
-      '<span class="li-tag">@BiteLabs Digital Health & Innovation Summit</span>')
+    .replace(/@BiteLabs Digital Health, AI & Innovation Summit/g,
+      '<span class="li-tag">@BiteLabs Digital Health, AI & Innovation Summit</span>')
     .replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
   document.getElementById('postTemplate').innerHTML = html;
 }
