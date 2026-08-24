@@ -381,11 +381,11 @@
   <!-- LinkedIn share toast -->
   <div id="liToast">
     <strong>🚀 Almost there!</strong>
-    Your badge has been downloaded &amp; post text copied.<br>
+    LinkedIn is opening with your caption filled in, and your badge just downloaded.<br>
     <ol class="steps">
-      <li>LinkedIn is opening — click <b>Start a post</b></li>
-      <li>Attach the downloaded badge image</li>
-      <li>Paste the copied text &amp; post!</li>
+      <li><b>Attach</b> the downloaded badge image to the post</li>
+      <li>If the caption didn't fill in, paste it — it's copied to your clipboard</li>
+      <li>Hit <b>Post</b>! 🎉</li>
     </ol>
   </div>
 
@@ -853,7 +853,28 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
 
 document.getElementById('linkedinBtn').addEventListener('click', function(e) {
   e.preventDefault();
-  document.getElementById('postSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const text = buildPostText();
+
+  // 1. Open LinkedIn's post composer with the caption pre-filled (desktop web).
+  //    (The badge image can't be pre-attached — LinkedIn blocks that — so we
+  //     download it and remind the user to drop it in.)
+  window.open('https://www.linkedin.com/feed/?shareActive=true&text=' +
+              encodeURIComponent(text), '_blank');
+
+  // 2. Copy the caption too, as a fallback if the pre-fill doesn't stick.
+  try { navigator.clipboard.writeText(text); } catch (_) {}
+
+  // 3. Download the badge so it's ready to attach.
+  const canvas = document.getElementById('badgeCanvas');
+  const nm = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs';
+  const a = document.createElement('a');
+  a.download = `${nm}_bitelabs_houston_badge.jpg`;
+  a.href = canvas.toDataURL('image/jpeg', 0.95);
+  a.click();
+
+  // 4. Show the reminder toast.
+  const t = document.getElementById('liToast');
+  if (t) { t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 9000); }
 });
 
 // ─── Post template ─────────────────────────────────────────────────────────
