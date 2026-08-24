@@ -338,6 +338,12 @@
   <span style="display:inline-block;margin-top:10px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.35);color:#34d399;font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;">📍 Houston, Texas</span>
 </header>
 
+<div style="max-width:1100px;width:100%;margin:0 auto 30px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.28);border-radius:14px;padding:16px 22px;color:rgba(255,255,255,0.82);font-size:13.5px;line-height:1.6;">
+  <div style="color:#34d399;font-weight:700;margin-bottom:8px;">📌 How to share your badge on LinkedIn</div>
+  <div><strong style="color:#fff;">1.</strong>&nbsp; Add your photo &amp; name &nbsp;→&nbsp; <strong style="color:#fff;">2.</strong>&nbsp; Click <strong>Download as JPG</strong> to save your badge &nbsp;→&nbsp; <strong style="color:#fff;">3.</strong>&nbsp; Click <strong>Share on LinkedIn</strong> — your caption fills in automatically &nbsp;→&nbsp; <strong style="color:#fff;">4.</strong>&nbsp; <strong style="color:#34d399;">Attach the badge you downloaded</strong> to the post and hit Post!</div>
+  <div style="margin-top:9px;font-size:12.5px;color:rgba(255,255,255,0.55);">💡 LinkedIn fills the caption in for you, but you'll need to attach the badge image yourself — that's the one manual step it requires.</div>
+</div>
+
 <div class="container">
 
   <div class="panel">
@@ -688,9 +694,10 @@ function drawPhoto(ctx, photo) {
     const pl = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
     pl.addColorStop(0,'#1A2D4A'); pl.addColorStop(1,'#0C1B33');
     ctx.fillStyle=pl; ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    ctx.fillStyle='rgba(16,185,129,0.20)';
-    ctx.beginPath(); ctx.arc(cx,cy-72,92,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(cx,cy+200,176,0,Math.PI,true); ctx.fill();
+    // Generic profile-photo placeholder (head + shoulders)
+    ctx.fillStyle='rgba(255,255,255,0.22)';
+    ctx.beginPath(); ctx.arc(cx, cy-58, 80, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy+195, 165, 0, Math.PI, true); ctx.fill();
   }
   ctx.restore();
 }
