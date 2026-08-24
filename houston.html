@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BiteLabs Badge Maker</title>
+  <title>BiteLabs Houston Summit — Attendee Badge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -334,13 +334,23 @@
       <span style="font-size:24px;font-weight:800;color:#fff;letter-spacing:-0.03em;">bitelabs</span>
     </span>
   </div>
-  <p>Create your <span class="green">official fellowship badge</span> in seconds</p>
+  <p>Create your <span class="green">Houston Summit attendee badge</span> in seconds</p>
+  <span style="display:inline-block;margin-top:10px;background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.35);color:#34d399;font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;">📍 Houston, Texas</span>
 </header>
 
 <div class="container">
 
   <div class="panel">
     <h2>Your Details</h2>
+
+    <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:12px;padding:18px 20px;margin-bottom:24px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#34d399;margin-bottom:10px;">📅 Event Details</div>
+      <div style="font-size:14px;font-weight:700;color:#fff;line-height:1.4;margin-bottom:8px;">BiteLabs Digital Health &amp; Innovation Summit</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.5);display:flex;flex-direction:column;gap:3px;">
+        <span>📍 TMC Innovation Factory — Houston, TX</span>
+        <span>🗓 Thursday, August 27, 2026</span>
+      </div>
+    </div>
 
     <label>Your Photo</label>
     <div class="upload-area" id="uploadArea">
@@ -354,23 +364,6 @@
 
     <label>Your Name</label>
     <input type="text" id="nameInput" placeholder="Your Name" />
-
-    <label>Cohort</label>
-    <select id="cohortSelect">
-      <option value="Winter 2026">Winter 2026</option>
-      <option value="Summer 2026" selected>Summer 2026</option>
-      <option value="UK Autumn 2026">UK Autumn 2026</option>
-      <option value="USA Fall 2026">USA Fall 2026</option>
-    </select>
-
-    <label>Badge Theme</label>
-    <select id="themeSelect">
-      <option value="bitelabs">BiteLabs</option>
-      <option value="london1">London City</option>
-      <option value="london2">London Big Ben</option>
-      <option value="usa">USA Flag</option>
-      <option value="houston">USA - Houston</option>
-    </select>
 
     <button class="btn-green" id="generateBtn">Generate Badge</button>
 
@@ -412,7 +405,7 @@
     <div class="htu-card">
       <h3>📋 Steps to share</h3>
       <ol class="htu-steps">
-        <li><span class="step-num">1</span>Fill in your name and select your cohort on the left.</li>
+        <li><span class="step-num">1</span>Enter your name and upload your photo on the left.</li>
         <li><span class="step-num">2</span>Click <strong style="color:#fff">Generate Badge</strong> to create your personalised badge.</li>
         <li><span class="step-num">3</span>Click <strong style="color:#fff">Download as JPG</strong> to save your badge image.</li>
         <li><span class="step-num">4</span>Copy the post template below, then head to LinkedIn.</li>
@@ -425,8 +418,8 @@
       <h3>💡 Tips for best results</h3>
       <ol class="htu-steps">
         <li><span class="step-num">✓</span>Use a clear, well-lit headshot for maximum impact.</li>
-        <li><span class="step-num">✓</span>Tag colleagues or mentors in your post to extend your reach.</li>
-        <li><span class="step-num">✓</span>Share within the first week of joining to maximise engagement.</li>
+        <li><span class="step-num">✓</span>Tag people you're excited to meet at the summit.</li>
+        <li><span class="step-num">✓</span>Post before the event to spark connections and plan meet-ups.</li>
         <li><span class="step-num">✓</span>Add your own personal touch to the template post below — make it yours!</li>
       </ol>
     </div>
@@ -457,6 +450,14 @@ const EMERALD_LIGHT = '#34D399';   // gradient ends / glow only
 const EMERALD_DARK  = '#059669';
 const WHITE         = '#ffffff';
 const S             = 1080;
+
+// ─── Event details (single source of truth — update here) ───────────────────
+const EVENT_NAME  = 'Digital Health & Innovation Summit';
+const EVENT_CITY  = 'Houston, TX';
+const EVENT_YEAR  = '2026';
+const EVENT_DATE  = 'August 27, 2026';        // Thursday
+const EVENT_VENUE = 'TMC Innovation Factory';
+const EVENT_LUMA  = 'https://luma.com/8jwu71au';
 
 // ─── Asset manifest ────────────────────────────────────────────────────────
 const ASSET_PATHS = {
@@ -500,8 +501,10 @@ async function loadAllAssets() {
   await Promise.all(loads);
 
   // The arc primitive ships on a solid black background — key that out to alpha
-  // so it composites cleanly over navy and the theme photos.
-  if (assets['arcRaw']) assets['arc'] = keyOutBlack(assets['arcRaw']);
+  // so it composites cleanly over navy and the theme photos. Wrapped so a
+  // canvas-taint failure (e.g. opened via file://) can't blank the whole badge.
+  try { if (assets['arcRaw']) assets['arc'] = keyOutBlack(assets['arcRaw']); }
+  catch (_) { assets['arc'] = null; }
 
   document.getElementById('loadingNote').style.display = 'none';
 }
@@ -541,8 +544,7 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
   reader.readAsDataURL(file);
 });
 
-['nameInput', 'cohortSelect', 'themeSelect'].forEach(id =>
-  document.getElementById(id).addEventListener('input', renderBadge));
+document.getElementById('nameInput').addEventListener('input', renderBadge);
 document.getElementById('generateBtn').addEventListener('click', renderBadge);
 
 // ─── Main render ───────────────────────────────────────────────────────────
@@ -550,16 +552,14 @@ function renderBadge() {
   const canvas = document.getElementById('badgeCanvas');
   const ctx    = canvas.getContext('2d');
   const name   = document.getElementById('nameInput').value.trim() || 'Your Name';
-  const cohort = document.getElementById('cohortSelect').value;
-  const theme  = document.getElementById('themeSelect').value;
 
   ctx.clearRect(0, 0, S, S);
-  drawBackground(ctx, theme);
+  drawBackground(ctx, 'houston');
   drawTopHeader(ctx);
   ctx.save();
   ctx.translate(0, 60);    // shift the middle block (photo + content) down
   drawPhoto(ctx, userPhoto);
-  drawContent(ctx, name, cohort);
+  drawContent(ctx, name);
   ctx.restore();
   drawSponsorFooter(ctx);  // full-width white footer bar with all logos
   drawFooterLogo(ctx);
@@ -580,7 +580,7 @@ function drawTopHeader(ctx) {
   ctx.font = `500 23px 'DM Sans', sans-serif`;
   ctx.fillStyle = 'rgba(255,255,255,0.62)';
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('Digital Health, AI & Innovation Fellowship Programme', S/2, 180);
+  ctx.fillText(EVENT_NAME, S/2, 180);
 }
 
 // ─── Background — navy (+ optional theme photo) + deco circles + dot grid ────
@@ -701,29 +701,34 @@ function coverFit(iw, ih, bw, bh) {
 }
 
 // ─── Content (right) — overline + name + cohort ─────────────────────────────
-function drawContent(ctx, name, cohort) {
+function drawContent(ctx, name) {
   const lx   = 596;            // left edge of text column
   const maxW = S - lx - 56;    // wrap width
 
   // Overline label (DM Sans, emerald, wide tracking)
   ctx.font = `600 20px 'DM Sans', sans-serif`;
   ctx.fillStyle = EMERALD; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  drawTracked(ctx, 'DIGITAL HEALTH · AI · INNOVATION', lx, 286, 3.4);
+  drawTracked(ctx, 'HOUSTON · TEXAS · ' + EVENT_YEAR, lx, 286, 3.0);
 
   // Name (Sora 700, emerald)
-  const nameFont = `700 70px 'Sora', sans-serif`;
+  const nameFont = `700 66px 'Sora', sans-serif`;
   const nameY = 332;
-  wrapText(ctx, name, lx, nameY, maxW, 76, EMERALD, nameFont);
+  wrapText(ctx, name, lx, nameY, maxW, 72, EMERALD, nameFont);
   const lines = countLines(ctx, name, maxW, nameFont);
-  let y = nameY + lines * 76 + 22;
+  let y = nameY + lines * 72 + 20;
 
-  // Cohort (Sora 700, white)
+  // Role (Sora 700, white)
   ctx.font = `700 40px 'Sora', sans-serif`;
   ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-  ctx.fillText(cohort, lx, y);
-  
-  // Fellow on new line (Sora 700, white)
-  ctx.fillText('Fellow', lx, y + 48);
+  ctx.fillText('Summit Attendee', lx, y);
+  y += 56;
+
+  // Date + venue (DM Sans, muted white)
+  ctx.font = `500 21px 'DM Sans', sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.72)';
+  ctx.fillText(EVENT_DATE, lx, y);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillText(EVENT_VENUE, lx, y + 30);
 }
 
 // Draw text with extra letter-spacing (px). Uses the ctx font/fill set by caller.
@@ -841,7 +846,7 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   const canvas = document.getElementById('badgeCanvas');
   const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
   const a = document.createElement('a');
-  a.download = `${name}_bitelabs_badge.jpg`;
+  a.download = `${name}_bitelabs_houston_badge.jpg`;
   a.href = canvas.toDataURL('image/jpeg', 0.95);
   a.click();
 });
@@ -853,11 +858,12 @@ document.getElementById('linkedinBtn').addEventListener('click', function(e) {
 
 // ─── Post template ─────────────────────────────────────────────────────────
 function buildPostText() {
-  const cohort = document.getElementById('cohortSelect').value;
   return (
-    `🎉 I'm thrilled to announce that I've been selected to join the @BiteLabs Digital Health Fellowship Programme!\n\n` +
-    `I'll be a part of the ${cohort} cohort — an incredible group of innovators working at the intersection of digital health, AI, and healthcare innovation.\n\n` +
-    `#BiteLabs #DigitalHealth #AI #HealthTech #Fellowship #Innovation #HealthcareInnovation`
+    `🌟 Excited to share that I'll be attending the @BiteLabs Digital Health & Innovation Summit in Houston!\n\n` +
+    `📍 ${EVENT_VENUE}, ${EVENT_CITY}  |  🗓 ${EVENT_DATE}\n\n` +
+    `A full day at the intersection of healthcare, AI, and innovation — expert panels, fellow pitches, a healthtech shark tank, and brilliant people to connect with. If you're going, let's meet up! 🤝\n\n` +
+    `👉 Register here: ${EVENT_LUMA}\n\n` +
+    `#BiteLabs #DigitalHealth #AI #HealthTech #Innovation #HealthcareInnovation #Houston #Summit2026`
   );
 }
 
@@ -865,14 +871,11 @@ function renderPostTemplate() {
   const raw = buildPostText();
   // Highlight LinkedIn tag and hashtags for display
   const html = raw
-    .replace(/@BiteLabs Digital Health Fellowship Programme/g,
-      '<span class="li-tag">@BiteLabs Digital Health Fellowship Programme</span>')
+    .replace(/@BiteLabs Digital Health & Innovation Summit/g,
+      '<span class="li-tag">@BiteLabs Digital Health & Innovation Summit</span>')
     .replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
   document.getElementById('postTemplate').innerHTML = html;
 }
-
-// Update post template whenever cohort changes
-document.getElementById('cohortSelect').addEventListener('change', renderPostTemplate);
 
 // Copy button
 document.getElementById('copyPostBtn').addEventListener('click', async () => {
