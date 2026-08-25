@@ -499,7 +499,7 @@ function loadImage(name, src) {
 async function loadAllAssets() {
   // The Houston badge is the pre-designed event graphic with the attendee photo
   // overlaid — so we only need the one full-bleed background image.
-  await loadImage('eventBg', 'assets/events/us-houston.jpg');
+  await loadImage('eventBg', 'assets/events/us-houston.jpg?v=2');
   document.getElementById('loadingNote').style.display = 'none';
 }
 
