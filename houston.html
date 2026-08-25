@@ -341,7 +341,7 @@
 <div style="max-width:1100px;width:100%;margin:0 auto 30px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.28);border-radius:14px;padding:16px 22px;color:rgba(255,255,255,0.82);font-size:13.5px;line-height:1.6;">
   <div style="color:#34d399;font-weight:700;margin-bottom:8px;">📌 How to share your badge on LinkedIn</div>
   <div style="display:flex;flex-direction:column;gap:7px;">
-    <div><strong style="color:#fff;">1.</strong>&nbsp; Add your photo &amp; name</div>
+    <div><strong style="color:#fff;">1.</strong>&nbsp; Upload your photo</div>
     <div><strong style="color:#fff;">2.</strong>&nbsp; Click <strong>Download as JPG</strong> to save your badge</div>
     <div><strong style="color:#fff;">3.</strong>&nbsp; Click <strong>Share on LinkedIn</strong> — your caption fills in automatically</div>
     <div><strong style="color:#fff;">4.</strong>&nbsp; <strong style="color:#34d399;">Attach the badge you downloaded</strong> to the post and hit Post!</div>
@@ -373,8 +373,6 @@
       </div>
     </div>
 
-    <label>Your Name</label>
-    <input type="text" id="nameInput" placeholder="Your Name" />
 
     <button class="btn-green" id="generateBtn">Generate Badge</button>
 
@@ -416,7 +414,7 @@
     <div class="htu-card">
       <h3>📋 Steps to share</h3>
       <ol class="htu-steps">
-        <li><span class="step-num">1</span>Enter your name and upload your photo on the left.</li>
+        <li><span class="step-num">1</span>Upload your photo on the left.</li>
         <li><span class="step-num">2</span>Click <strong style="color:#fff">Generate Badge</strong> to create your personalised badge.</li>
         <li><span class="step-num">3</span>Click <strong style="color:#fff">Download as JPG</strong> to save your badge image.</li>
         <li><span class="step-num">4</span>Copy the post template below, then head to LinkedIn.</li>
@@ -499,24 +497,9 @@ function loadImage(name, src) {
 }
 
 async function loadAllAssets() {
-  const loads = [
-    loadImage('logo',      ASSET_PATHS.logo),
-    loadImage('logoWhite', ASSET_PATHS.logoWhite),
-    loadImage('dotGrid',   ASSET_PATHS.dotGrid),
-    loadImage('arcRaw',    ASSET_PATHS.arc),
-    loadImage('sponsors',  ASSET_PATHS.sponsors),
-  ];
-  for (const [key, path] of Object.entries(ASSET_PATHS.themes)) {
-    loads.push(loadImage('theme_' + key, path));
-  }
-  await Promise.all(loads);
-
-  // The arc primitive ships on a solid black background — key that out to alpha
-  // so it composites cleanly over navy and the theme photos. Wrapped so a
-  // canvas-taint failure (e.g. opened via file://) can't blank the whole badge.
-  try { if (assets['arcRaw']) assets['arc'] = keyOutBlack(assets['arcRaw']); }
-  catch (_) { assets['arc'] = null; }
-
+  // The Houston badge is the pre-designed event graphic with the attendee photo
+  // overlaid — so we only need the one full-bleed background image.
+  await loadImage('eventBg', 'assets/events/us-houston.jpg');
   document.getElementById('loadingNote').style.display = 'none';
 }
 
@@ -555,26 +538,16 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
   reader.readAsDataURL(file);
 });
 
-document.getElementById('nameInput').addEventListener('input', renderBadge);
 document.getElementById('generateBtn').addEventListener('click', renderBadge);
 
 // ─── Main render ───────────────────────────────────────────────────────────
 function renderBadge() {
   const canvas = document.getElementById('badgeCanvas');
   const ctx    = canvas.getContext('2d');
-  const name   = document.getElementById('nameInput').value.trim() || 'Your Name';
 
   ctx.clearRect(0, 0, S, S);
-  drawBackground(ctx, 'houston');
-  drawTopHeader(ctx);
-  ctx.save();
-  ctx.translate(0, 60);    // shift the middle block (photo + content) down
-  drawPhoto(ctx, userPhoto);
-  drawContent(ctx, name);
-  ctx.restore();
-  drawSponsorFooter(ctx);  // full-width white footer bar with all logos
-  drawFooterLogo(ctx);
-  drawUrlPill(ctx);
+  drawBackground(ctx);          // full-bleed Houston event graphic
+  drawPhoto(ctx, userPhoto);    // attendee photo in the empty lower-left area
   enableButtons();
 }
 
@@ -589,56 +562,15 @@ function drawTopHeader(ctx) {
   }
 }
 
-// ─── Background — navy (+ optional theme photo) + deco circles + dot grid ────
-function drawBackground(ctx, theme) {
-  // Deep navy base
-  ctx.fillStyle = NAVY;
-  ctx.fillRect(0, 0, S, S);
-
-  // Optional theme photo as a subtle, heavily-overlaid textured backdrop
-  const themeImg = assets['theme_' + theme];
-  if (themeImg) {
-    const { sx, sy, sw, sh } = coverFit(themeImg.width, themeImg.height, S, S);
-    ctx.drawImage(themeImg, sx, sy, sw, sh, 0, 0, S, S);
-    ctx.fillStyle = theme === 'bitelabs'
-      ? 'rgba(12,27,51,0.46)'    // plain theme — lighter so the teal wave reads
-      : 'rgba(12,27,51,0.64)';   // photo themes
+// ─── Background — full-bleed Houston event graphic ──────────────────────────
+function drawBackground(ctx) {
+  const bg = assets['eventBg'];
+  if (bg) {
+    const { sx, sy, sw, sh } = coverFit(bg.width, bg.height, S, S);
+    ctx.drawImage(bg, sx, sy, sw, sh, 0, 0, S, S);
+  } else {
+    ctx.fillStyle = NAVY;
     ctx.fillRect(0, 0, S, S);
-  }
-
-  // Extra ambient richness for the plain BiteLabs theme (brand "ambient glow")
-  if (theme === 'bitelabs') {
-    let g = ctx.createRadialGradient(S*0.82, S*0.18, 0, S*0.82, S*0.18, S*0.72);
-    g.addColorStop(0,   'rgba(16,185,129,0.18)');
-    g.addColorStop(0.5, 'rgba(16,185,129,0.05)');
-    g.addColorStop(1,   'rgba(16,185,129,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
-
-    g = ctx.createRadialGradient(S*0.10, S*0.92, 0, S*0.10, S*0.92, S*0.60);
-    g.addColorStop(0, 'rgba(20,184,166,0.12)');
-    g.addColorStop(1, 'rgba(20,184,166,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
-  }
-
-  // Arc primitive — hero flourish sweeping across the upper background
-  const arc = assets['arc'];
-  if (arc) {
-    const w = S * 1.12, h = w * arc.height / arc.width;
-    ctx.save();
-    if (themeImg) ctx.globalAlpha = 0.75;   // dim the arc when a theme photo sits behind it
-    ctx.drawImage(arc, (S - w) / 2 + 130, S - h + 90, w, h);
-    ctx.restore();
-  }
-
-  // Dot-grid primitive, bottom-right (lighten-blended so the black bg drops out)
-  const dg = assets['dotGrid'];
-  if (dg) {
-    const w = S * 0.30, h = w * dg.height / dg.width;
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighten';
-    ctx.globalAlpha = 0.6;
-    ctx.drawImage(dg, S - w - 18, S - h - 36, w, h);
-    ctx.restore();
   }
 }
 
@@ -669,35 +601,27 @@ function drawFooterLogo(ctx) {
 
 // ─── Photo — large circular portrait, left ──────────────────────────────────
 function drawPhoto(ctx, photo) {
-  const cx = 322, cy = 470, r = 238;
-
-  // Emerald glow
-  const glow = ctx.createRadialGradient(cx, cy, r, cx, cy, r+36);
-  glow.addColorStop(0,'rgba(16,185,129,0.45)'); glow.addColorStop(1,'rgba(16,185,129,0)');
-  ctx.beginPath(); ctx.arc(cx, cy, r+36, 0, Math.PI*2);
-  ctx.fillStyle = glow; ctx.fill();
+  // Sits in the empty lower-left blue area of the Houston event graphic
+  const cx = 252, cy = 762, r = 172;
 
   // White ring
   ctx.save();
-  ctx.beginPath(); ctx.arc(cx, cy, r+10, 0, Math.PI*2);
-  ctx.fillStyle='#ffffff';
-  ctx.shadowColor='rgba(0,0,0,0.45)'; ctx.shadowBlur=30;
+  ctx.beginPath(); ctx.arc(cx, cy, r+9, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 26;
   ctx.fill(); ctx.restore();
 
+  // Clip + draw photo (or placeholder)
   ctx.save();
   ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.clip();
-
   if (photo) {
     const {sx,sy,sw,sh} = coverFit(photo.width, photo.height, r*2, r*2);
     ctx.drawImage(photo, sx, sy, sw, sh, cx-r, cy-r, r*2, r*2);
   } else {
-    const pl = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
-    pl.addColorStop(0,'#1A2D4A'); pl.addColorStop(1,'#0C1B33');
-    ctx.fillStyle=pl; ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    // Generic profile-photo placeholder (head + shoulders)
-    ctx.fillStyle='rgba(255,255,255,0.22)';
-    ctx.beginPath(); ctx.arc(cx, cy-58, 80, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(cx, cy+195, 165, 0, Math.PI, true); ctx.fill();
+    ctx.fillStyle = '#13213c'; ctx.fillRect(cx-r, cy-r, r*2, r*2);
+    ctx.fillStyle = 'rgba(255,255,255,0.24)';
+    ctx.beginPath(); ctx.arc(cx, cy-46, 58, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy+128, 116, 0, Math.PI, true); ctx.fill();
   }
   ctx.restore();
 }
@@ -864,9 +788,8 @@ function enableButtons() {
 
 document.getElementById('downloadBtn').addEventListener('click', () => {
   const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
   const a = document.createElement('a');
-  a.download = `${name}_bitelabs_houston_badge.jpg`;
+  a.download = 'bitelabs_houston_summit_badge.jpg';
   a.href = canvas.toDataURL('image/jpeg', 0.95);
   a.click();
 });
@@ -886,9 +809,8 @@ document.getElementById('linkedinBtn').addEventListener('click', function(e) {
 
   // 3. Download the badge so it's ready to attach.
   const canvas = document.getElementById('badgeCanvas');
-  const nm = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs';
   const a = document.createElement('a');
-  a.download = `${nm}_bitelabs_houston_badge.jpg`;
+  a.download = 'bitelabs_houston_summit_badge.jpg';
   a.href = canvas.toDataURL('image/jpeg', 0.95);
   a.click();
 
