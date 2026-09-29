@@ -405,8 +405,11 @@
       </div>
     </div>
 
-    <label>Your Name</label>
-    <input type="text" id="nameInput" placeholder="Your Name" />
+    <label>First Name</label>
+    <input type="text" id="firstNameInput" placeholder="Dr Rhianna" />
+
+    <label>Last Name</label>
+    <input type="text" id="lastNameInput" placeholder="Madden-Hanson" />
 
     <label>Your Role</label>
     <select id="roleSelect">
@@ -560,6 +563,11 @@ function generateReferralCode(name) {
   return 'BL_' + formatted;
 }
 
+function getFullName() {
+  return [document.getElementById('firstNameInput').value.trim(),
+          document.getElementById('lastNameInput').value.trim()].filter(Boolean).join(' ');
+}
+
 // ─── Photo upload ──────────────────────────────────────────────────────────
 let userPhoto = null;
 
@@ -581,13 +589,14 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
   reader.readAsDataURL(file);
 });
 
-// Update referral code live as name is typed
-document.getElementById('nameInput').addEventListener('input', function() {
-  const code = generateReferralCode(this.value);
-  document.getElementById('referralCodeDisplay').textContent = code;
+// Update referral code + badge live as the name is typed
+function onNameInput() {
+  document.getElementById('referralCodeDisplay').textContent = generateReferralCode(getFullName());
   renderBadge();
   renderPostTemplate();
-});
+}
+['firstNameInput', 'lastNameInput'].forEach(id =>
+  document.getElementById(id).addEventListener('input', onNameInput));
 
 ['roleSelect', 'themeSelect'].forEach(id =>
   document.getElementById(id).addEventListener('input', renderBadge));
@@ -599,16 +608,17 @@ document.getElementById('generateBtn').addEventListener('click', renderBadge);
 function renderBadge() {
   const canvas = document.getElementById('badgeCanvas');
   const ctx    = canvas.getContext('2d');
-  const name   = document.getElementById('nameInput').value.trim() || 'Your Name';
+  const first  = document.getElementById('firstNameInput').value.trim();
+  const last   = document.getElementById('lastNameInput').value.trim();
   const role   = document.getElementById('roleSelect').value;
   const theme  = document.getElementById('themeSelect').value;
-  const code   = generateReferralCode(document.getElementById('nameInput').value.trim());
+  const code   = generateReferralCode(getFullName());
 
   ctx.clearRect(0, 0, S, S);
   drawBackground(ctx, theme);
   drawLogo(ctx);
   drawPhoto(ctx, userPhoto);
-  drawNameRole(ctx, name, role, code);
+  drawNameRole(ctx, first, last, role, code);
   drawSponsors(ctx);
   drawFooter(ctx);
   enableButtons();
@@ -760,8 +770,18 @@ function coverFit(iw, ih, bw, bh) {
 }
 
 // ─── Name + Role + Referral Code ───────────────────────────────────────────
-function drawNameRole(ctx, name, role, referralCode) {
+// Largest Sora-800 size (<= maxPx, >= minPx) at which `text` fits within maxW.
+function fitFont(ctx, text, maxW, maxPx, minPx) {
+  for (let px = maxPx; px > minPx; px -= 2) {
+    ctx.font = `800 ${px}px 'Sora', sans-serif`;
+    if (ctx.measureText(text).width <= maxW) return px;
+  }
+  return minPx;
+}
+
+function drawNameRole(ctx, first, last, role, referralCode) {
   const lx = 566, nameY = 400;
+  const maxW = S - lx - 58;
 
   // Accent bar
   const barG = ctx.createLinearGradient(lx, nameY-20, lx, nameY+320);
@@ -769,12 +789,24 @@ function drawNameRole(ctx, name, role, referralCode) {
   barG.addColorStop(1,'rgba(52,211,153,0)');
   ctx.fillStyle = barG; ctx.fillRect(lx, nameY-20, 5, 320);
 
-  // Name
-  wrapText(ctx, name, lx+30, nameY, S-lx-58, 76, WHITE, `800 64px 'Sora', sans-serif`);
+  // Name — first + last on their own lines, each auto-shrunk to fit
+  const displayFirst = first || 'Your';
+  const displayLast  = last  || 'Name';
+  ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  let y = nameY;
+
+  const fPx = fitFont(ctx, displayFirst, maxW, 64, 36);
+  ctx.font = `800 ${fPx}px 'Sora', sans-serif`;
+  ctx.fillText(displayFirst, lx+30, y);
+  y += Math.round(fPx * 1.08) + 4;
+
+  const lPx = fitFont(ctx, displayLast, maxW, 64, 36);
+  ctx.font = `800 ${lPx}px 'Sora', sans-serif`;
+  ctx.fillText(displayLast, lx+30, y);
+  y += Math.round(lPx * 1.08) + 20;
 
   // Role (below name)
-  const lines  = countLines(ctx, name, S-lx-58, `800 64px 'Sora', sans-serif`);
-  const roleY  = nameY + lines * 76 + 24;
+  const roleY = y;
   ctx.font=`600 38px 'Sora', sans-serif`; ctx.fillStyle=GREEN;
   ctx.textAlign='left'; ctx.textBaseline='top';
   ctx.fillText(role, lx+30, roleY);
@@ -942,7 +974,7 @@ function enableButtons() {
 
 document.getElementById('downloadBtn').addEventListener('click', () => {
   const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
+  const name   = getFullName().replace(/\s+/g,'_') || 'bitelabs_badge';
   const a = document.createElement('a');
   a.download = `${name}_bitelabs_faculty_badge.jpg`;
   a.href = canvas.toDataURL('image/jpeg', 0.95);
@@ -956,9 +988,8 @@ document.getElementById('linkedinBtn').addEventListener('click', function(e) {
 
 // ─── Post template ─────────────────────────────────────────────────────────
 function buildPostText() {
-  const name = document.getElementById('nameInput').value.trim() || 'Your Name';
   const role = document.getElementById('roleSelect').value;
-  const code = generateReferralCode(document.getElementById('nameInput').value.trim());
+  const code = generateReferralCode(getFullName());
 
   const roleLabel = role === 'BiteLabs Faculty' ? 'Faculty Member'
                   : role === 'BiteLabs Mentor'  ? 'Mentor'

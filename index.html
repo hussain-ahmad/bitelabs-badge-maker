@@ -352,8 +352,11 @@
       </div>
     </div>
 
-    <label>Your Name</label>
-    <input type="text" id="nameInput" placeholder="Your Name" />
+    <label>First Name</label>
+    <input type="text" id="firstNameInput" placeholder="Dr Rhianna" />
+
+    <label>Last Name</label>
+    <input type="text" id="lastNameInput" placeholder="Madden-Hanson" />
 
     <label>Cohort</label>
     <select id="cohortSelect">
@@ -541,7 +544,7 @@ document.getElementById('photoInput').addEventListener('change', function(e) {
   reader.readAsDataURL(file);
 });
 
-['nameInput', 'cohortSelect', 'themeSelect'].forEach(id =>
+['firstNameInput', 'lastNameInput', 'cohortSelect', 'themeSelect'].forEach(id =>
   document.getElementById(id).addEventListener('input', renderBadge));
 document.getElementById('generateBtn').addEventListener('click', renderBadge);
 
@@ -549,7 +552,8 @@ document.getElementById('generateBtn').addEventListener('click', renderBadge);
 function renderBadge() {
   const canvas = document.getElementById('badgeCanvas');
   const ctx    = canvas.getContext('2d');
-  const name   = document.getElementById('nameInput').value.trim() || 'Your Name';
+  const first  = document.getElementById('firstNameInput').value.trim();
+  const last   = document.getElementById('lastNameInput').value.trim();
   const cohort = document.getElementById('cohortSelect').value;
   const theme  = document.getElementById('themeSelect').value;
 
@@ -559,7 +563,7 @@ function renderBadge() {
   ctx.save();
   ctx.translate(0, 60);    // shift the middle block (photo + content) down
   drawPhoto(ctx, userPhoto);
-  drawContent(ctx, name, cohort);
+  drawContent(ctx, first, last, cohort);
   ctx.restore();
   drawSponsorFooter(ctx);  // full-width white footer bar with all logos
   drawFooterLogo(ctx);
@@ -701,7 +705,7 @@ function coverFit(iw, ih, bw, bh) {
 }
 
 // ─── Content (right) — overline + name + cohort ─────────────────────────────
-function drawContent(ctx, name, cohort) {
+function drawContent(ctx, first, last, cohort) {
   const lx   = 596;            // left edge of text column
   const maxW = S - lx - 56;    // wrap width
 
@@ -710,20 +714,38 @@ function drawContent(ctx, name, cohort) {
   ctx.fillStyle = EMERALD; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   drawTracked(ctx, 'DIGITAL HEALTH · AI · INNOVATION', lx, 286, 3.4);
 
-  // Name (Sora 700, emerald)
-  const nameFont = `700 70px 'Sora', sans-serif`;
-  const nameY = 332;
-  wrapText(ctx, name, lx, nameY, maxW, 76, EMERALD, nameFont);
-  const lines = countLines(ctx, name, maxW, nameFont);
-  let y = nameY + lines * 76 + 22;
+  // Name — first + last on their own lines, each auto-shrunk to fit the column
+  const displayFirst = first || 'Your';
+  const displayLast  = last  || 'Name';
+  ctx.fillStyle = EMERALD; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  let y = 332;
+
+  const fPx = fitFont(ctx, displayFirst, maxW, 70, 38);
+  ctx.font = `700 ${fPx}px 'Sora', sans-serif`;
+  ctx.fillText(displayFirst, lx, y);
+  y += Math.round(fPx * 1.06) + 4;
+
+  const lPx = fitFont(ctx, displayLast, maxW, 70, 38);
+  ctx.font = `700 ${lPx}px 'Sora', sans-serif`;
+  ctx.fillText(displayLast, lx, y);
+  y += Math.round(lPx * 1.06) + 22;
 
   // Cohort (Sora 700, white)
   ctx.font = `700 40px 'Sora', sans-serif`;
   ctx.fillStyle = WHITE; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText(cohort, lx, y);
-  
+
   // Fellow on new line (Sora 700, white)
   ctx.fillText('Fellow', lx, y + 48);
+}
+
+// Largest Sora-700 size (<= maxPx, >= minPx) at which `text` fits within maxW.
+function fitFont(ctx, text, maxW, maxPx, minPx) {
+  for (let px = maxPx; px > minPx; px -= 2) {
+    ctx.font = `700 ${px}px 'Sora', sans-serif`;
+    if (ctx.measureText(text).width <= maxW) return px;
+  }
+  return minPx;
 }
 
 // Draw text with extra letter-spacing (px). Uses the ctx font/fill set by caller.
@@ -839,7 +861,9 @@ function enableButtons() {
 
 document.getElementById('downloadBtn').addEventListener('click', () => {
   const canvas = document.getElementById('badgeCanvas');
-  const name   = document.getElementById('nameInput').value.trim().replace(/\s+/g,'_') || 'bitelabs_badge';
+  const name   = [document.getElementById('firstNameInput').value.trim(),
+                  document.getElementById('lastNameInput').value.trim()]
+                  .filter(Boolean).join('_').replace(/\s+/g,'_') || 'bitelabs_badge';
   const a = document.createElement('a');
   a.download = `${name}_bitelabs_badge.jpg`;
   a.href = canvas.toDataURL('image/jpeg', 0.95);
